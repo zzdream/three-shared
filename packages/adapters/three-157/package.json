@@ -1,0 +1,17 @@
+{
+  "name": "@shared/three-adapter-157",
+  "version": "0.1.0",
+  "description": "Three.js adapter for r157",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "peerDependencies": {
+    "three": "0.157.x"
+  },
+  "dependencies": {
+    "@shared/core-engine": "workspace:*"
+  }
+}

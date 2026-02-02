@@ -1,0 +1,17 @@
+{
+  "name": "@shared/three-adapter-182",
+  "version": "0.1.0",
+  "description": "Three.js adapter for r182",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "peerDependencies": {
+    "three": "0.182.x"
+  },
+  "dependencies": {
+    "@shared/core-engine": "workspace:*"
+  }
+}

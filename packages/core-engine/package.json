@@ -1,0 +1,20 @@
+{
+  "name": "@shared/core-engine",
+  "version": "0.1.0",
+  "description": "Three.js engine core without binding to specific three version",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "peerDependencies": {
+    "three": ">=0.157.0"
+  },
+  "dependencies": {
+    "earcut": "^2.2.4",
+    "@shared/xodr": "workspace:*"
+  }
+}

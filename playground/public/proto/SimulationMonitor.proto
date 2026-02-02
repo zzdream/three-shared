@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package SimulationMonitor;
+
+// 坐标信息
+message Coordinate {
+  double x = 1;
+  double y = 2;
+  double z = 3;
+}
+
+// 姿态角信息
+message Pose {
+  double h = 1;                                       // 航向角
+  double p = 2;                                       // 俯仰角
+  double r = 3;                                       // 横滚角
+}
+
+// Object定义
+message Object {
+  uint32 id = 1;              			                  // 对象ID (主车的ID固定为1)
+  string name = 2;                                    // 对象name
+  uint32 catalogName = 3;                             // 引用了OpenScenario Catalog，对应场景文件中的CatalogReference->catalogName字段，1:VehicleCatalog,2:PedestrianCatalog,3:MiscObjectCatalog
+  string entryName = 4;                               // 引用了OpenScenario Catalog，对应场景文件中的CatalogReference->entryName字段
+  Coordinate coord = 5;       			                  // 坐标，世界坐标系
+  Pose pose = 6;             			                    // 姿态角(航向角/俯仰角/横滚角)，世界坐标系，单位：弧度
+  double speed = 7;                                   // 对象速度
+}
+
+// 交通灯信息
+message TrafficLight {
+  uint32 id = 1;              			                  // 交通灯ID (对应OpenDrive中的<signal> id)
+  uint32 status = 2;              			              // 交通灯状态 0:红灯 1:黄灯 2:绿灯 3:无
+}
+
+// 一帧仿真环境数据
+message Frame {
+  double simulation_time = 1;                         // 仿真时间，单位：秒
+  repeated Object objects = 2;                        // 交通参与物列表（所有车、人、来自场景文件的物体，不包括来自地图的物体）
+  repeated TrafficLight traffic_lights = 3;           // 仿真运行时的交通灯状态
+}
+
+// 场景结束
+message FinishScenario {
+}
+
+// SimPro发给仿真监控前端的消息结构
+message SimProToFrontEnd {
+  Frame frame = 1;                                    // 一帧仿真环境数据
+  FinishScenario finish_scenario = 2;                 // 场景结束
+}
+
+// 前端所需数据发送频率信息
+message FrameRate {
+  double frame_rate = 1;                              // 前端所需数据发送频率 (单位：次/秒)
+}
+
+// 仿真监控前端发给SimPro的消息
+message FrontEndToSimPro {
+  FrameRate frame_rate = 1;                           // 仿真监控前端发给SimPro告知自己所需数据的发送频率
+}
+
+// SimPro与仿真监控前端之间发送的消息
+message SimulationMonitorMsg {
+  SimProToFrontEnd sim_pro_to_front_end = 1;          // SimPro发给仿真监控前端的消息
+  FrontEndToSimPro front_end_to_sim_pro = 2;          // 仿真监控前端发给SimPro的消息
+}
+
+// 录制的仿真监控数据包（用于回放）
+message SimulationMonitorBag {
+  repeated Frame frames = 1;                          // 整个场景每一帧仿真环境数据
+}
