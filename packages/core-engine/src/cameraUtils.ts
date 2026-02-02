@@ -53,11 +53,18 @@ export function setupCameraAndControls(center: any, maxSize: number, camera: any
 	controls.update()
 }
 
-export const setCenterAndCamera = ({ allRoadPoints, camera, controls }: { allRoadPoints: any[], camera: any, controls: any }) => {
+/**
+ * 设置相机和控制器位置（便捷函数）
+ * @param allRoadPoints 所有道路点数组
+ * @param camera 相机对象
+ * @param controls 控制器对象
+ * @returns 返回边界框
+ */
+export const setCenterAndCamera = ({ allRoadPoints, camera, controls }: { allRoadPoints: any[]; camera: any; controls: any }) => {
 	if (!allRoadPoints || !camera || !controls) {
 		throw new Error('Invalid input: allRoadPoints, camera and controls must be provided.')
 	}
 	const { center, maxSize, boundingBox } = calculateViewCenter(allRoadPoints)
 	setupCameraAndControls(center, maxSize, camera, controls)
-	return {boundingBox}
+	return { boundingBox }
 }

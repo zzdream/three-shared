@@ -45,4 +45,8 @@ export {
 }
 export type { CacheDBConfig, CacheXodrDataParams, GetCachedXodrDataParams }
 
-export { drawObjects, drawSignals, drawTunnels, drawBridges}
+export { drawObjects, drawSignals, drawTunnels, drawBridges }
+
+// XODR 地图初始化器
+export { XodrMapInitializer } from './XodrMapInitializer'
+export type { XodrMapInitializerOptions, XodrMapInitializerResult } from './XodrMapInitializer'
