@@ -6,15 +6,8 @@
  */
 declare global {
 	interface Window {
-		Module: {
-			onRuntimeInitialized?: () => void | Promise<void>
-			cwrap?: (name: string, returnType: string, argTypes: string[] | string) => (...args: any[]) => any
-			_malloc?: (size: number) => number
-			_free?: (ptr: number) => void
-			lengthBytesUTF8?: (str: string) => number
-			stringToUTF8?: (str: string, outPtr: number, maxBytesToWrite: number) => void
-			[key: string]: any
-		}
+		/** WebAssembly 模块实例，由 loadWasm() 注入；与业务项目中的 Window.Module 声明合并，此处使用 any 避免类型冲突 */
+		Module?: any
 	}
 }
 /**

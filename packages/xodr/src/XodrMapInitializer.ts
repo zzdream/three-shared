@@ -1,7 +1,7 @@
-import { loadWasm } from '@shared/wasm'
+import { loadWasm } from '@threejs-shared/wasm'
 import { loadXodrChunked, parseXodrData, renderXodrFaces, renderXodrLines, processLineData, drawObjects, drawSignals, drawTunnels, drawBridges, getCachedXodrData, cacheXodrData } from './index'
-import type { ThreeEngine } from '@shared/core-engine'
-import { GroundGrip, createGroup } from '@shared/core-engine'
+import type { ThreeEngine } from '@threejs-shared/core-engine'
+import { GroundGrip, createGroup } from '@threejs-shared/core-engine'
 
 /**
  * XODR 地图初始化配置选项

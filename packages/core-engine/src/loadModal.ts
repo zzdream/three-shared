@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
-import { getCachedXodrData, cacheXodrData } from '@shared/xodr'
+import { getCachedXodrData, cacheXodrData } from '@threejs-shared/cache-db'
 
 const FbxLoader = new FBXLoader()
 

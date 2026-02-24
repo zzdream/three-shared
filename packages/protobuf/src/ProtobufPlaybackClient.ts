@@ -1,8 +1,8 @@
 import { ProtoBufManager } from './ProtoBufManager'
 import { TimerManager } from './TimerManager'
 import type { ProtoBufManagerOptions } from './ProtoBufManager'
-import type { LoadXodrOptions } from '@shared/xodr'
-import { loadXodr } from '@shared/xodr'
+import type { LoadXodrOptions } from '@threejs-shared/xodr'
+import { loadXodr } from '@threejs-shared/xodr'
 
 /**
  * Protobuf 回放客户端回调函数

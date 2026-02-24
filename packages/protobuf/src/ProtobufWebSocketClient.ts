@@ -1,6 +1,7 @@
 import { ProtoBufManager } from './ProtoBufManager'
 import { WebSocketManager, WebSocketStatus, MessageFormat } from './WebSocketManager'
-import type { ProtobufType, WebSocketManagerOptions, WebSocketCallbacks, ProtoBufManagerOptions } from './index'
+import type { ProtobufType } from './types'
+import type { WebSocketManagerOptions, WebSocketCallbacks, ProtoBufManagerOptions } from './index'
 
 /**
  * Protobuf WebSocket 客户端配置

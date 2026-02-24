@@ -21,7 +21,7 @@ import {
 	type CacheDBConfig,
 	type CacheXodrDataParams,
 	type GetCachedXodrDataParams,
-} from './cacheDB'
+} from '@threejs-shared/cache-db'
 import { drawTunnels, drawBridges } from './Tunnel'
 export { loadXodr, parseXodrData, loadXodrChunked }
 export type { LoadXodrOptions, LoadXodrChunkedOptions }

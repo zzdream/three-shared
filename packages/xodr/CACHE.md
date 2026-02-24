@@ -16,7 +16,7 @@
 ### 基本使用
 
 ```typescript
-import { cacheXodrData, getCachedXodrData } from '@shared/xodr'
+import { cacheXodrData, getCachedXodrData } from '@threejs-shared/xodr'
 
 // 缓存数据（24小时后过期）
 await cacheXodrData({
@@ -305,7 +305,7 @@ onBeforeUnmount(() => {
 ### 示例1: 带缓存的 XODR 加载流程
 
 ```typescript
-import { loadXodrChunked, parseXodrData, cacheXodrData, getCachedXodrData } from '@shared/xodr'
+import { loadXodrChunked, parseXodrData, cacheXodrData, getCachedXodrData } from '@threejs-shared/xodr'
 
 const CACHE_CONFIG = {
   database: 'xodrCache',
@@ -387,7 +387,7 @@ await cacheXodrData({
 ### 示例3: 缓存管理和监控
 
 ```typescript
-import { getCacheTTL, cleanExpiredData } from '@shared/xodr'
+import { getCacheTTL, cleanExpiredData } from '@threejs-shared/xodr'
 
 // 检查缓存状态
 async function checkCacheStatus(field: string) {

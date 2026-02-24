@@ -1,5 +1,5 @@
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
-import type { HDREnvironmentLoaderAdapter } from '@shared/core-engine'
+import type { HDREnvironmentLoaderAdapter } from '@threejs-shared/core-engine'
 
 /**
  * Three.js r157 适配器

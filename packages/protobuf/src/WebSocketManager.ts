@@ -1,4 +1,4 @@
-import type { Type as ProtobufType } from 'protobufjs'
+import type { ProtobufType } from './types'
 
 /**
  * WebSocket 连接状态

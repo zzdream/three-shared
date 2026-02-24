@@ -1,12 +1,25 @@
 {
-  "name": "@shared/core-engine",
-  "version": "0.1.0",
+  "name": "@threejs-shared/core-engine",
+  "version": "0.1.13",
   "description": "Three.js engine core without binding to specific three version",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./adapter-hdr": {
+      "types": "./dist/adapter-hdr.d.ts",
+      "import": "./dist/adapter-hdr.js",
+      "default": "./dist/adapter-hdr.js"
+    }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json"
   },
@@ -15,6 +28,6 @@
   },
   "dependencies": {
     "earcut": "^2.2.4",
-    "@shared/xodr": "workspace:*"
+    "@threejs-shared/cache-db": "workspace:*"
   }
 }

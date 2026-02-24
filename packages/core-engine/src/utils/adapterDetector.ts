@@ -6,19 +6,19 @@ import type { HDREnvironmentLoaderAdapter } from '../types/adapter'
  */
 export async function autoDetectHDREnvironmentLoaderAdapter(): Promise<HDREnvironmentLoaderAdapter> {
   // 优先尝试使用 HDRLoader (r182+)
-  try {
-    const hdrModule = await import('three/examples/jsm/loaders/HDRLoader.js' as any)
-    if ((hdrModule as any).HDRLoader) {
-      return {
-        createLoader(manager?: any) {
-          return new (hdrModule as any).HDRLoader(manager)
-        },
-        version: 'auto-detected-r182'
-      }
-    }
-  } catch (e) {
-    // HDRLoader 不存在，继续尝试 RGBELoader
-  }
+  // try {
+  //   const hdrModule = await import('three/examples/jsm/loaders/HDRLoader.js' as any)
+  //   if ((hdrModule as any).HDRLoader) {
+  //     return {
+  //       createLoader(manager?: any) {
+  //         return new (hdrModule as any).HDRLoader(manager)
+  //       },
+  //       version: 'auto-detected-r182'
+  //     }
+  //   }
+  // } catch (e) {
+  //   // HDRLoader 不存在，继续尝试 RGBELoader
+  // }
 
   // 回退到 RGBELoader (r157)
   try {

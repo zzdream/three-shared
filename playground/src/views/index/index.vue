@@ -13,10 +13,10 @@
   import { MODAL_TO_URL, FBX_URL, GLB_URL } from '@/utils/modelConst'
   // import { MODAL_TO_URL } from '@/utils/imgConst'
 
-  import { ThreeEngine, createModalGLB, createModalFBX } from '@shared/core-engine'
-  import { XodrMapInitializer } from '@shared/xodr'
-  import { ProtobufWebSocketClient, MessageFormat, ProtobufPlaybackClient } from '@shared/protobuf'
-  import type { WebSocketCallbacks } from '@shared/protobuf'
+  import { ThreeEngine, createModalGLB, createModalFBX } from '@threejs-shared/core-engine'
+  import { XodrMapInitializer } from '@threejs-shared/xodr'
+  import { ProtobufWebSocketClient, MessageFormat, ProtobufPlaybackClient } from '@threejs-shared/protobuf'
+  import type { WebSocketCallbacks } from '@threejs-shared/protobuf'
   const containerRef = ref<HTMLElement | null>(null)
 
   // Three.js 相关变量

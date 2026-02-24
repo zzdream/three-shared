@@ -1,5 +1,5 @@
 import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js'
-import type { HDREnvironmentLoaderAdapter } from '@shared/core-engine'
+import type { HDREnvironmentLoaderAdapter } from '@threejs-shared/core-engine'
 
 /**
  * Three.js r182 适配器

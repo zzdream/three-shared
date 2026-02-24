@@ -4,7 +4,7 @@
  */
 // 使用 any 类型以避免类型检查错误，运行时由使用方项目提供正确的 three 版本
 import * as THREE from 'three'
-import { createGeometry, mergeGeometries } from '@shared/core-engine'
+import { createGeometry, mergeGeometries } from '@threejs-shared/core-engine'
 
 /**
  * 车道类型颜色映射

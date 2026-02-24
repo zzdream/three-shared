@@ -8,6 +8,6 @@ import type { ProtobufPlaybackClientConfig, ProtobufPlaybackCallbacks } from './
 import type { ProtoBufManagerOptions } from './ProtoBufManager'
 import { TimerManager } from './TimerManager'
 export { ProtoBufManager, WebSocketManager, WebSocketStatus, MessageFormat, ProtobufWebSocketClient, ProtobufPlaybackClient, TimerManager }
-export type { Type as ProtobufType } from 'protobufjs'
+export type { ProtobufType } from './types'
 export type { WebSocketManagerOptions, WebSocketCallbacks, ProtobufWebSocketClientConfig, ProtobufPlaybackClientConfig, ProtobufPlaybackCallbacks, ProtoBufManagerOptions }
 

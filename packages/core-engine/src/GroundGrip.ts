@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { getCachedXodrData, cacheXodrData } from '@shared/xodr'
+import { getCachedXodrData, cacheXodrData } from '@threejs-shared/cache-db'
 import type { HDREnvironmentLoaderAdapter } from './types/adapter'
 import { autoDetectHDREnvironmentLoaderAdapter } from './utils/adapterDetector'
 

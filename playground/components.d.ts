@@ -9,11 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    BaseInputNumber: typeof import('./src/components/BaseInputNumber/index.vue')['default']
-    BaseSlider: typeof import('./src/components/BaseSlider/index.vue')['default']
-    BaseUpload: typeof import('./src/components/BaseUpload/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SvgIcon: typeof import('./src/components/SvgIcon/index.vue')['default']
   }
 }

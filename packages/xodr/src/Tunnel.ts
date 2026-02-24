@@ -1,5 +1,5 @@
-import {  getTunnelsDrawInfo } from '@shared/wasm'
-import { createGroup, createModalFBX, createGeometry, mergeGeometries } from '@shared/core-engine'
+import {  getTunnelsDrawInfo } from '@threejs-shared/wasm'
+import { createGroup, createModalFBX, createGeometry, mergeGeometries } from '@threejs-shared/core-engine'
 import * as THREE from 'three'
 // 隧道模型的基础宽度（单位：米）
 let tunnelModelCache: any = null

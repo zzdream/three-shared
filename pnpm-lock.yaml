@@ -14,7 +14,7 @@ importers:
 
   packages/adapters/three-157:
     dependencies:
-      '@shared/core-engine':
+      '@threejs-shared/core-engine':
         specifier: workspace:*
         version: link:../../core-engine
       three:
@@ -23,18 +23,20 @@ importers:
 
   packages/adapters/three-182:
     dependencies:
-      '@shared/core-engine':
+      '@threejs-shared/core-engine':
         specifier: workspace:*
         version: link:../../core-engine
       three:
         specifier: 0.182.x
         version: 0.182.0
 
+  packages/cache-db: {}
+
   packages/core-engine:
     dependencies:
-      '@shared/xodr':
+      '@threejs-shared/cache-db':
         specifier: workspace:*
-        version: link:../xodr
+        version: link:../cache-db
       earcut:
         specifier: ^2.2.4
         version: 2.2.4
@@ -44,7 +46,7 @@ importers:
 
   packages/protobuf:
     dependencies:
-      '@shared/xodr':
+      '@threejs-shared/xodr':
         specifier: workspace:*
         version: link:../xodr
       protobufjs:
@@ -55,10 +57,13 @@ importers:
 
   packages/xodr:
     dependencies:
-      '@shared/core-engine':
+      '@threejs-shared/cache-db':
+        specifier: workspace:*
+        version: link:../cache-db
+      '@threejs-shared/core-engine':
         specifier: workspace:*
         version: link:../core-engine
-      '@shared/wasm':
+      '@threejs-shared/wasm':
         specifier: workspace:*
         version: link:../wasm
       three:
@@ -70,19 +75,19 @@ importers:
       '@jridgewell/sourcemap-codec':
         specifier: ^1.4.14
         version: 1.5.5
-      '@shared/core-engine':
+      '@threejs-shared/core-engine':
         specifier: workspace:*
         version: link:../packages/core-engine
-      '@shared/protobuf':
+      '@threejs-shared/protobuf':
         specifier: workspace:*
         version: link:../packages/protobuf
-      '@shared/three-adapter-182':
+      '@threejs-shared/three-adapter-182':
         specifier: workspace:*
         version: link:../packages/adapters/three-182
-      '@shared/wasm':
+      '@threejs-shared/wasm':
         specifier: workspace:*
         version: link:../packages/wasm
-      '@shared/xodr':
+      '@threejs-shared/xodr':
         specifier: workspace:*
         version: link:../packages/xodr
       '@types/node':

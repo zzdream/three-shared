@@ -1,4 +1,4 @@
-import { loadOpenDRIVEContent, getRoadData } from '@shared/wasm'
+import { loadOpenDRIVEContent, getRoadData } from '@threejs-shared/wasm'
 
 /**
  * 解析 XODR 数据

@@ -63,7 +63,9 @@
 //   }
 // }
 
-import protobuf from 'protobufjs'
+import * as protobuf from 'protobufjs'
+import type { ProtobufType } from './types'
+import type { Root } from 'protobufjs'
 
 /**
  * ProtoBufManager 配置选项
@@ -84,9 +86,9 @@ export interface ProtoBufManagerOptions {
  */
 export class ProtoBufManager {
   /** 已加载的 proto 类型缓存 */
-  private protoCache: Map<string, protobuf.Type> = new Map()
+  private protoCache: Map<string, ProtobufType> = new Map()
   /** 正在加载的 Promise 缓存，用于并发控制 */
-  private loadingPromises: Map<string, Promise<protobuf.Type>> = new Map()
+  private loadingPromises: Map<string, Promise<ProtobufType>> = new Map()
   /** 配置选项 */
   private options: Required<ProtoBufManagerOptions>
 
@@ -101,7 +103,7 @@ export class ProtoBufManager {
    * 
    * @param protoFilePath proto 文件的路径（URL）
    * @param messageType 消息类型名称（例如：'protobuf.WsFrameData' 或 'SimulationMonitor.SimulationMonitorMsg'）
-   * @returns Promise<protobuf.Type> 解析后的消息类型
+   * @returns Promise<ProtobufType> 解析后的消息类型
    * @throws {Error} 如果参数无效、文件加载失败、解析失败或消息类型不存在
    * 
    * @example
@@ -110,7 +112,7 @@ export class ProtoBufManager {
    * const messageType = await manager.loadProto('/proto/SimulationMonitor.proto', 'SimulationMonitor.SimulationMonitorMsg')
    * ```
    */
-  async loadProto(protoFilePath: string, messageType: string): Promise<protobuf.Type> {
+  async loadProto(protoFilePath: string, messageType: string): Promise<ProtobufType> {
     // 参数验证
     if (!protoFilePath || typeof protoFilePath !== 'string') {
       throw new Error('protoFilePath must be a non-empty string')
@@ -155,7 +157,7 @@ export class ProtoBufManager {
     protoFilePath: string,
     messageType: string,
     cacheKey: string
-  ): Promise<protobuf.Type> {
+  ): Promise<ProtobufType> {
     try {
       this.log(`Loading proto file: ${protoFilePath}`)
 
@@ -190,7 +192,7 @@ export class ProtoBufManager {
       }
 
       // 3. 解析 proto 文件
-      let root: protobuf.Root
+      let root: Root
       try {
         root = protobuf.parse(content).root
       } catch (error) {

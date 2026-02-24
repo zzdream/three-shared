@@ -1,5 +1,5 @@
-import {  getXodrSignalsInfo, drawXodrObjects } from '@shared/wasm'
-import { createGroup, CrosswalkLineRoadMark, MeshLineRoadMark, createTexture, dreawPaking,createModelClone, createCacheModalFBX, createCacheModalGLB } from '@shared/core-engine'
+import {  getXodrSignalsInfo, drawXodrObjects } from '@threejs-shared/wasm'
+import { createGroup, CrosswalkLineRoadMark, MeshLineRoadMark, createTexture, dreawPaking,createModelClone, createCacheModalFBX, createCacheModalGLB } from '@threejs-shared/core-engine'
 export const drawObjects = async (MODAL_TO_URL: any, cache: { useCache: boolean, database: string, table: string }) => {
     const objectList = await drawXodrObjects()
     const objectModel: any = {}

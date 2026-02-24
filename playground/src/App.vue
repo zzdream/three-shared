@@ -3,7 +3,7 @@
   <router-view />
 </template>
 
-<style lang="less">
+<style>
 #app {
   height: 100%;
   font-size: 14px;

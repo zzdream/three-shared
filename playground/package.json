@@ -1,7 +1,7 @@
 {
-  "name": "cloud_scene_editor",
+  "name": "playground",
   "private": true,
-  "version": "0.0.11",
+  "version": "0.0.20",
   "lint-staged": {
     "src/**/*.{js,jsx,vue,ts,tsx}": [
       "npm run eslint"
@@ -37,17 +37,17 @@
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-html": "^3.2.0",
-    "vite-svg-loader": "^5.1.0",    
+    "vite-svg-loader": "^5.1.0",
     "vue": "^3.2.47",
     "vue-eslint-parser": "^9.1.1",
     "vue-request": "^2.0.0-rc.4",
     "vue-router": "^4.4.5",
     "vue-tsc": "^1.2.0",
-    "@shared/wasm": "workspace:*",
-    "@shared/xodr": "workspace:*",
-    "@shared/core-engine": "workspace:*",
-    "@shared/three-adapter-182": "workspace:*",
-    "@shared/protobuf": "workspace:*"
+    "@threejs-shared/wasm": "workspace:*",
+    "@threejs-shared/xodr": "workspace:*",
+    "@threejs-shared/core-engine": "workspace:*",
+    "@threejs-shared/three-adapter-182": "workspace:*",
+    "@threejs-shared/protobuf": "workspace:*"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.5.1",
