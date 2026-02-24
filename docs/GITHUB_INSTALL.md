@@ -30,12 +30,12 @@
 
 ### 3.1 创建 GitHub 仓库
 
-1. 在 GitHub 创建仓库，如：`https://github.com/你的用户名/three-shared`
+1. 在 GitHub 创建仓库，如：`https://github.com/zzdream/three-shared`
 2. 本地添加 remote 并推送：
 
 ```bash
 cd /path/to/three-shared
-git remote add github git@github.com:你的用户名/three-shared.git
+git remote add github git@github.com:z'z'dream/three-shared.git
 git push -u github master
 # 或
 git push -u github main
@@ -56,7 +56,7 @@ git push github v0.1.0
 若主仓库在 Gitee，可设 GitHub 为镜像，发版时同步：
 
 ```bash
-git remote add github git@github.com:你的用户名/three-shared.git
+git remote add github git@github.com:zzdream/three-shared.git
 git push github master
 git push github v0.1.0
 ```
@@ -70,33 +70,33 @@ git push github v0.1.0
 ### 4.1 完整安装（Three.js 0.182 场景，如 playground）
 
 ```bash
-pnpm add "@shared/core-engine@github:你的用户名/three-shared#v0.1.0:packages/core-engine" \
-  "@shared/xodr@github:你的用户名/three-shared#v0.1.0:packages/xodr" \
-  "@shared/wasm@github:你的用户名/three-shared#v0.1.0:packages/wasm" \
-  "@shared/protobuf@github:你的用户名/three-shared#v0.1.0:packages/protobuf" \
-  "@shared/three-adapter-182@github:你的用户名/three-shared#v0.1.0:packages/adapters/three-182"
+pnpm add "@shared/core-engine@github:zzdream/three-shared#v0.1.0:packages/core-engine" \
+  "@shared/xodr@github:zzdream/three-shared#v0.1.0:packages/xodr" \
+  "@shared/wasm@github:zzdream/three-shared#v0.1.0:packages/wasm" \
+  "@shared/protobuf@github:zzdream/three-shared#v0.1.0:packages/protobuf" \
+  "@shared/three-adapter-182@github:zzdream/three-shared#v0.1.0:packages/adapters/three-182"
 ```
 
 ### 4.2 单包安装
 
 ```bash
 # 核心
-pnpm add "@shared/core-engine@github:你的用户名/three-shared#v0.1.0:packages/core-engine"
+pnpm add "@shared/core-engine@github:zzdream/three-shared#v0.1.0:packages/core-engine"
 
 # XODR
-pnpm add "@shared/xodr@github:你的用户名/three-shared#v0.1.0:packages/xodr"
+pnpm add "@shared/xodr@github:zzdream/three-shared#v0.1.0:packages/xodr"
 
 # WASM
-pnpm add "@shared/wasm@github:你的用户名/three-shared#v0.1.0:packages/wasm"
+pnpm add "@shared/wasm@github:zzdream/three-shared#v0.1.0:packages/wasm"
 
 # Protobuf
-pnpm add "@shared/protobuf@github:你的用户名/three-shared#v0.1.0:packages/protobuf"
+pnpm add "@shared/protobuf@github:zzdream/three-shared#v0.1.0:packages/protobuf"
 
 # 适配器 - Three 0.182
-pnpm add "@shared/three-adapter-182@github:你的用户名/three-shared#v0.1.0:packages/adapters/three-182"
+pnpm add "@shared/three-adapter-182@github:zzdream/three-shared#v0.1.0:packages/adapters/three-182"
 
 # 适配器 - Three 0.157
-pnpm add "@shared/three-adapter-157@github:你的用户名/three-shared#v0.1.0:packages/adapters/three-157"
+pnpm add "@shared/three-adapter-157@github:zzdream/three-shared#v0.1.0:packages/adapters/three-157"
 ```
 
 ### 4.3 写入 package.json
@@ -104,11 +104,11 @@ pnpm add "@shared/three-adapter-157@github:你的用户名/three-shared#v0.1.0:p
 ```json
 {
   "dependencies": {
-    "@shared/core-engine": "github:你的用户名/three-shared#v0.1.0:packages/core-engine",
-    "@shared/xodr": "github:你的用户名/three-shared#v0.1.0:packages/xodr",
-    "@shared/wasm": "github:你的用户名/three-shared#v0.1.0:packages/wasm",
-    "@shared/protobuf": "github:你的用户名/three-shared#v0.1.0:packages/protobuf",
-    "@shared/three-adapter-182": "github:你的用户名/three-shared#v0.1.0:packages/adapters/three-182"
+    "@shared/core-engine": "github:zzdream/three-shared#v0.1.0:packages/core-engine",
+    "@shared/xodr": "github:zzdream/three-shared#v0.1.0:packages/xodr",
+    "@shared/wasm": "github:zzdream/three-shared#v0.1.0:packages/wasm",
+    "@shared/protobuf": "github:zzdream/three-shared#v0.1.0:packages/protobuf",
+    "@shared/three-adapter-182": "github:zzdream/three-shared#v0.1.0:packages/adapters/three-182"
   }
 }
 ```
@@ -159,7 +159,7 @@ jobs:
 
       - name: Push to GitHub
         run: |
-          git remote add github https://${{ secrets.GH_TOKEN }}@github.com/你的用户名/three-shared.git || true
+          git remote add github https://${{ secrets.GH_TOKEN }}@github.com/zzdream/three-shared.git || true
           git push github ${{ github.ref_name }}
 ```
 

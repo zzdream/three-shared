@@ -49,5 +49,5 @@ fi
 
 echo ""
 echo "✅ 完成！其他项目可安装："
-echo "  pnpm add \"@shared/core-engine@github:你的用户名/three-shared#$VERSION:packages/core-engine\""
+echo "  pnpm add \"@shared/core-engine@github:zzdream/three-shared#$VERSION:packages/core-engine\""
 echo "  详见 docs/GITHUB_INSTALL.md"
