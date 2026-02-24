@@ -47,14 +47,52 @@ export class GroundGrip {
   createGround(url: any) {
     // 计算地面尺寸
     const { centerX, centerZ, width, length } = this.resetBoundingBox
+    // 调试信息：输出地面尺寸，帮助排查问题
+    console.log('地面尺寸:', { width, length, centerX, centerZ })
+    
+    // 创建地面材质，先使用纯色（避免贴图加载失败时显示白色）
+    // 注意：必须设置颜色，否则 Three.js 默认是白色（0xffffff）
+    // 使用与场景背景色接近的颜色，这样即使贴图加载失败也不会出现明显的白色区域
+    const groundMaterial = new (THREE as any).MeshStandardMaterial({ 
+      side: (THREE as any).DoubleSide,
+      // 设置默认颜色，避免贴图加载失败时显示纯白色
+      color: 0xe8e8e8, // 浅灰色，接近场景背景色 0xf7f7f8
+    })
+    
     // 载入草坪贴图
     const textureLoader = new (THREE as any).TextureLoader()
-    const grassTexture = textureLoader.load(url)
-    grassTexture.wrapS = (THREE as any).RepeatWrapping
-    grassTexture.wrapT = (THREE as any).RepeatWrapping
-    grassTexture.repeat.set(width / this.scaleFactor, length / this.scaleFactor)
-    // 创建地面
-    const groundMaterial = new (THREE as any).MeshStandardMaterial({ map: grassTexture, side: (THREE as any).DoubleSide })
+    const grassTexture = textureLoader.load(
+      url,
+      // 加载成功回调
+      (texture: any) => {
+        // 设置纹理颜色空间，避免图片发白
+        if ('colorSpace' in texture) {
+          texture.colorSpace = (THREE as any).SRGBColorSpace
+        } else if ('encoding' in texture) {
+          texture.encoding = (THREE as any).sRGBEncoding
+        }
+        // 优化纹理过滤设置
+        texture.minFilter = (THREE as any).LinearMipmapLinearFilter
+        texture.magFilter = (THREE as any).LinearFilter
+        texture.generateMipmaps = true
+        // 设置纹理重复和包裹模式
+        texture.wrapS = (THREE as any).RepeatWrapping
+        texture.wrapT = (THREE as any).RepeatWrapping
+        texture.repeat.set(width / this.scaleFactor, length / this.scaleFactor)
+        // 应用贴图到材质
+        groundMaterial.map = grassTexture
+        groundMaterial.needsUpdate = true
+      },
+      // 进度回调（可选）
+      undefined,
+      // 错误回调
+      (error: any) => {
+        // 确保材质使用纯色，移除可能存在的贴图引用
+        groundMaterial.map = null
+        groundMaterial.needsUpdate = true
+      }
+    )
+    
     const ground = new (THREE as any).Mesh(new (THREE as any).PlaneGeometry(width, length), groundMaterial)
     ground.rotation.x = -Math.PI / 2 // 让地面水平铺在 XZ 平面上
     ground.receiveShadow = true // 允许阴影投射到地面
@@ -103,7 +141,7 @@ export class GroundGrip {
             const skyGeometry = new (THREE as any).SphereGeometry(skyRadius, 32, 32)
             const material = new (THREE as any).MeshBasicMaterial({
               map: texture, // 将 HDR 图像作为材质贴图
-              side: (THREE as any).BackSide // 使球体的内表面可见
+              side: (THREE as any).BackSide, // 使球体的内表面可见
             })
             // 创建球体对象并应用材质
             const sphere = new (THREE as any).Mesh(skyGeometry, material)

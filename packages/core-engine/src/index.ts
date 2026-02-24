@@ -20,7 +20,12 @@ export {
 } from './threejsUtils'
 
 // Modal Loader
-export { createModalFBX, createCacheModalFBX } from './loadModal'
+export {
+  createModalFBX,
+  createCacheModalFBX,
+  createModalGLB,
+  createCacheModalGLB,
+} from './loadModal'
 
 // ========== 其他类 ==========
 export { GroundGrip, type GroundGripOptions } from './GroundGrip'

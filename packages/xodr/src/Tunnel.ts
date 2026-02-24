@@ -4,13 +4,13 @@ import * as THREE from 'three'
 // 隧道模型的基础宽度（单位：米）
 let tunnelModelCache: any = null
 const TUNNEL_MODEL_WIDTH = 7
-export const drawBridgesOrTunnel = (pointsData: any[], color: number, group: { add: (arg0: any) => void }) => {
+export const drawBridgesOrTunnel = (pointsData: any[], color: number, group: { add: (arg0: any) => void }, opacity: number = 0.3) => {
   const roadsgeometry = []
   const pos = pointsData.map((p) => {
     return new THREE.Vector3(p.x, -p.y)
   })
   roadsgeometry.push(createGeometry(pos, color))
-  group.add(mergeGeometries(roadsgeometry, 0.3))
+  group.add(mergeGeometries(roadsgeometry, opacity))
 }
 
 /**
@@ -18,17 +18,32 @@ export const drawBridgesOrTunnel = (pointsData: any[], color: number, group: { a
  * @returns 隧道信息列表
  * Tunnel 不传 就是绘制隧道轮廓，如果传了 就是绘制隧道模型
  */
-export const drawTunnels = async (Tunnel: any, step: number = 2, color: number = 0xffffff): Promise<any>  => {
+export const drawTunnels = async (Tunnel: any, step: number = 2, color: number = 0x00ffff, opacity: number = 0.3): Promise<any>  => {
   const list = await getTunnelsDrawInfo(step)
   const tunnelGroup = createGroup()
+  if (!list || list.length === 0) return null
   if (!Tunnel) {
     tunnelGroup.__type = 'tunnel'
     for (let i = 0; i < list.length; i++) {
       for (let j = 0; j < list[i].tunnels.length; j++) {
-        const outs= list[i].tunnels[j].outline
-        const len = outs.first.length
-        const outline = [outs.first[0],outs.first[len - 1],outs.second[len - 1],outs.second[0]]
-        drawBridgesOrTunnel(outline, color, tunnelGroup)
+        const outs = list[i].tunnels[j].outline
+        // 构建完整的曲线轮廓：沿 first 的所有点，然后沿 second 反向连接
+        const outline: any[] = []
+        // 添加 first 数组的所有点（从第一个到最后一个）
+        if (Array.isArray(outs.first) && outs.first.length > 0) {
+          outline.push(...outs.first)
+        }
+        // 添加 second 数组的所有点（从最后一个到第一个，反向）
+        if (Array.isArray(outs.second) && outs.second.length > 0) {
+          for (let k = outs.second.length - 1; k >= 0; k--) {
+            outline.push(outs.second[k])
+          }
+        }
+        // 确保轮廓闭合（添加第一个点以形成闭合多边形）
+        if (outline.length > 0) {
+          outline.push(outline[0])
+        }
+        drawBridgesOrTunnel(outline, color, tunnelGroup, opacity)
       }
     }
     return tunnelGroup
@@ -134,7 +149,7 @@ const ensureTunnelModel = async (tunnelPath: any) => {
    * @returns 桥梁信息列表
    * 桥梁直接绘制，暂不支持模型
   */
-  export const drawBridges = async (color: number = 0xffffff): Promise<any>  => {
+  export const drawBridges = async (color: number = 0xffffff, opacity: number = 0.3): Promise<any>  => {
     const BridgesDrawInfo = window.Module.cwrap!('getBridgesDrawInfo', 'string', 'number')
     const bridgesGroup = createGroup()
     const result = BridgesDrawInfo(1)
@@ -142,10 +157,24 @@ const ensureTunnelModel = async (tunnelPath: any) => {
     const list = JSON.parse(result)
     for (let i = 0; i < list.length; i++) {
       for (let j = 0; j < list[i].bridges.length; j++) {
-        const outs= list[i].bridges[j].outline
-        const len = outs.first.length
-        const outline = [outs.first[0],outs.first[len - 1],outs.second[len - 1],outs.second[0]]
-        drawBridgesOrTunnel(outline, color, bridgesGroup)
+        const outs = list[i].bridges[j].outline
+        // 构建完整的曲线轮廓：沿 first 的所有点，然后沿 second 反向连接
+        const outline: any[] = []
+        // 添加 first 数组的所有点（从第一个到最后一个）
+        if (Array.isArray(outs.first) && outs.first.length > 0) {
+          outline.push(...outs.first)
+        }
+        // 添加 second 数组的所有点（从最后一个到第一个，反向）
+        if (Array.isArray(outs.second) && outs.second.length > 0) {
+          for (let k = outs.second.length - 1; k >= 0; k--) {
+            outline.push(outs.second[k])
+          }
+        }
+        // 确保轮廓闭合（添加第一个点以形成闭合多边形）
+        if (outline.length > 0) {
+          outline.push(outline[0])
+        }
+        drawBridgesOrTunnel(outline, color, bridgesGroup, opacity)
       }
     }
     return bridgesGroup

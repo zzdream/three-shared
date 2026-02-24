@@ -39,14 +39,13 @@ export function loadOpenDRIVEContent(xodr: string): void {
  * @returns 解析后的道路数据数组
  */
 export async function getRoadData(step: number = 1): Promise<any[]> {
-	console.time('getRoadData')
 	const getSingleRoadData = window.Module.cwrap!('getSingleRoadData', 'string', 'number')
 	const data = []
 	let result
 	while ((result = getSingleRoadData(step))) {
 	  data.push(JSON.parse(result))
 	}
-	console.timeEnd('getRoadData')
+	console.log(data, 'getSingleRoadData')
 	return data
 }
 /**

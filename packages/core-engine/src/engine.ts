@@ -221,7 +221,7 @@ export class ThreeEngine {
 	 * 初始化相机
 	 */
 	private _initCamera(container: HTMLElement, options: CameraOptions = {}): any {
-		const { fov = 55, near = 0.1, far = 50000, position, target } = options
+		const { fov = 55, near = 0.1, far = 500000, position, target } = options
 
 		const aspect = container.clientWidth / container.clientHeight
 		const camera = new (THREE as any).PerspectiveCamera(fov, aspect, near, far)
@@ -297,7 +297,7 @@ export class ThreeEngine {
 			dampingFactor = 0.05,
 			screenSpacePanning = false,
 			minDistance = 0.5,
-			maxDistance = 40000,
+			maxDistance = 50000,
 			maxPolarAngle = Math.PI / 2,
 			enableRotate = false,
 			enableZoom = true,

@@ -46,7 +46,8 @@
     "@shared/wasm": "workspace:*",
     "@shared/xodr": "workspace:*",
     "@shared/core-engine": "workspace:*",
-    "@shared/three-adapter-182": "workspace:*"
+    "@shared/three-adapter-182": "workspace:*",
+    "@shared/protobuf": "workspace:*"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.5.1",

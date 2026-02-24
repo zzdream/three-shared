@@ -1,5 +1,5 @@
 import {  getXodrSignalsInfo, drawXodrObjects } from '@shared/wasm'
-import { createGroup, CrosswalkLineRoadMark, MeshLineRoadMark, createTexture, dreawPaking,createModelClone, createCacheModalFBX } from '@shared/core-engine'
+import { createGroup, CrosswalkLineRoadMark, MeshLineRoadMark, createTexture, dreawPaking,createModelClone, createCacheModalFBX, createCacheModalGLB } from '@shared/core-engine'
 export const drawObjects = async (MODAL_TO_URL: any, cache: { useCache: boolean, database: string, table: string }) => {
     const objectList = await drawXodrObjects()
     const objectModel: any = {}
@@ -34,10 +34,11 @@ export const drawObjects = async (MODAL_TO_URL: any, cache: { useCache: boolean,
             })
           }
         } else {
+          console.log(key, 'key')
           if (key == 'Tunnel_door') continue
           const resourcePath = MODAL_TO_URL[key]
           if (!resourcePath) {
-            console.log(key, '未找到对应的资源')
+            // console.log(key, '未找到对应的资源')
             continue
           }
           // 判断是图片还是模型：根据文件扩展名
@@ -48,20 +49,29 @@ export const drawObjects = async (MODAL_TO_URL: any, cache: { useCache: boolean,
             // 如果是图片，使用 createTexture
             if (!objectModel[key]) {
               objectModel[key] = await createTexture(resourcePath, item)
-              objectGroup.add(objectModel[key] )
+              // objectGroup.add(objectModel[key] )
             }
             const imageClone = objectModel[key].clone()
             imageClone.position.set(item.x, item.z || 0.01, -item.y)
             imageClone.rotation.x = -Math.PI / 2
             imageClone.rotation.z = (item.hdg || 0) - Math.PI / 2
-            // objectGroup.add(createTexture(resourcePath, item))
+            objectGroup.add(imageClone)
           } else if (isModel) {
+            console.log(isModel, 'isModel')
             // 如果是模型，使用模型加载逻辑
             if (objectModel[key]) {
               objectGroup.add(createModelClone(objectModel[key], item))
             } else {
               const task = (async () => {
-                objectModel[key] = await createCacheModalFBX(resourcePath, cache)
+                // 根据文件扩展名判断使用 FBX 还是 GLB 加载方法
+                const isFBX = /\.(fbx|FBX)$/i.test(pathStr)
+                const isGLB = /\.(glb|gltf)$/i.test(pathStr)
+                console.log(isFBX, isGLB, 'isFBX, isGLB')
+                if (isFBX) {
+                  objectModel[key] = await createCacheModalFBX(resourcePath, cache)
+                } else if (isGLB) {
+                  objectModel[key] = await createCacheModalGLB(resourcePath, cache)
+                }
                 objectGroup.add(createModelClone(objectModel[key], item))
               })()
               asyncTasks.push(task)
@@ -107,7 +117,7 @@ export const drawSignals = async (MODAL_TO_URL: any, isLoadStatuslight:{
     const loadTrafficSignModel = async (key: string, item: any) => {
       if (MODAL_TO_URL[key]?.indexOf('.') == -1) return null
       if (!MODAL_TO_URL[key]) {
-        console.log(key, 'key')
+        // console.log(key, 'key')
       }
       const resourcePath = MODAL_TO_URL[key]
       // 判断是图片还是模型：根据文件扩展名
@@ -129,7 +139,14 @@ export const drawSignals = async (MODAL_TO_URL: any, isLoadStatuslight:{
       } else if (isModel) {
         // 如果是模型，使用模型加载逻辑
         if (!signalModel[key]) {
-          signalModel[key] = await createCacheModalFBX(resourcePath, cache)
+          // 根据文件扩展名判断使用 FBX 还是 GLB 加载方法
+          const isFBX = /\.(fbx|FBX)$/i.test(pathStr)
+          const isGLB = /\.(glb|gltf)$/i.test(pathStr)
+          if (isFBX) {
+            signalModel[key] = await createCacheModalFBX(resourcePath, cache)
+          } else if (isGLB) {
+            signalModel[key] = await createCacheModalGLB(resourcePath, cache)
+          }
         }
         const modelClone = signalModel[key].clone()
         modelClone.__attr = item
@@ -137,7 +154,7 @@ export const drawSignals = async (MODAL_TO_URL: any, isLoadStatuslight:{
         modelClone.rotation.set(0, item.hdg || 0, 0, 'XYZ')
         return modelClone
       } else {
-        console.log(key, '资源类型无法识别:', pathStr)
+        // console.log(key, '资源类型无法识别:', pathStr)
         return null
       }
     }
@@ -166,7 +183,14 @@ export const drawSignals = async (MODAL_TO_URL: any, isLoadStatuslight:{
                 signalModel[stateKey].__attr = item
               } else if (isStateModel && !signalModel[stateKey]) {
                 // 预加载状态模型
-                signalModel[stateKey] = await createCacheModalFBX(stateResourcePath, cache)
+                // 根据文件扩展名判断使用 FBX 还是 GLB 加载方法
+                const isFBX = /\.(fbx|FBX)$/i.test(statePathStr)
+                const isGLB = /\.(glb|gltf)$/i.test(statePathStr)
+                if (isFBX) {
+                  signalModel[stateKey] = await createCacheModalFBX(stateResourcePath, cache)
+                } else if (isGLB) {
+                  signalModel[stateKey] = await createCacheModalGLB(stateResourcePath, cache)
+                }
                 signalModel[stateKey].__attr = item
               }
             }

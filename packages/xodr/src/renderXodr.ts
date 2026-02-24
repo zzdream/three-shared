@@ -46,7 +46,6 @@ export function processFaceData(data: any[], defaultColor?: any) {
 						const [x, y] = xy.split(' ').map(Number)
 						return new (THREE as any).Vector3(x, -y)
 					})
-
 					// 根据车道类型获取颜色
 					const color = defaultColor || LANE_TYPE_COLORS[lane.type]
 
@@ -65,7 +64,6 @@ export function processFaceData(data: any[], defaultColor?: any) {
 export function processLineData(data: any[], defaultLineColor: number = 0xffffff) {
 	const linesByColor: Record<string | number, any> = {}
 	const allRoadPoints: any[] = []
-
 	data.forEach((item: any) => {
 		if (!item.laneSection) return
 
@@ -198,6 +196,7 @@ export function renderXodrLines(
 		return
 	}
 	const { defaultLineColor = 0xffffff } = options
+
 	const { allRoadPoints, linesByColor } = processLineData(data, defaultLineColor)
 
 	if (linesByColor && Object.keys(linesByColor).length > 0) {

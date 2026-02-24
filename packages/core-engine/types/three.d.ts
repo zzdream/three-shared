@@ -44,6 +44,70 @@ declare module 'three/examples/jsm/loaders/FBXLoader.js' {
 	}
 }
 
+declare module 'three/examples/jsm/loaders/DRACOLoader.js' {
+	import { LoadingManager } from 'three'
+
+	export class DRACOLoader {
+		constructor(manager?: LoadingManager)
+		setDecoderPath(path: string): void
+		setDecoderConfig(config: any): void
+		setWorkerLimit(workerLimit: number): void
+		load(url: string, onLoad?: (geometry: any) => void, onProgress?: (event: ProgressEvent) => void, onError?: (error: Error) => void): void
+		dispose(): void
+	}
+}
+
+declare module 'three/examples/jsm/loaders/GLTFLoader.js' {
+	import { Object3D, LoadingManager, AnimationClip } from 'three'
+
+	export interface GLTF {
+		scene: Object3D
+		scenes: Object3D[]
+		cameras: any[]
+		animations: AnimationClip[]
+		asset: any
+		parser: any
+		userData: any
+	}
+
+	export class GLTFLoader {
+		constructor(manager?: LoadingManager)
+		load(
+			url: string,
+			onLoad?: (gltf: GLTF) => void,
+			onProgress?: (event: ProgressEvent) => void,
+			onError?: (error: Error) => void
+		): void
+		parse(data: ArrayBuffer | string, path: string, onLoad: (gltf: GLTF) => void, onError?: (error: Error) => void): void
+		setDRACOLoader(dracoLoader: any): GLTFLoader
+		setDDSLoader(ddsLoader: any): GLTFLoader
+		setKTX2Loader(ktx2Loader: any): GLTFLoader
+		setMeshoptDecoder(meshoptDecoder: any): GLTFLoader
+		register(parserPlugin: any): GLTFLoader
+	}
+}
+
+declare module 'three/examples/jsm/exporters/GLTFExporter.js' {
+	import { Object3D } from 'three'
+
+	export interface GLTFExporterOptions {
+		binary?: boolean
+		truncateDrawRange?: boolean
+		embedImages?: boolean
+		animations?: any[]
+		includeCustomExtensions?: boolean
+	}
+
+	export class GLTFExporter {
+		parse(
+			input: Object3D,
+			onCompleted: (result: ArrayBuffer | object) => void,
+			onError?: (error: Error) => void,
+			options?: GLTFExporterOptions
+		): void
+	}
+}
+
 declare module 'three/examples/jsm/loaders/HDRLoader.js' {
 	import { DataTexture, LoadingManager } from 'three'
 

@@ -1,0 +1,94 @@
+
+syntax = "proto3";
+
+package protobuf;
+
+message Coordinate{
+    double x = 1;
+    double y = 2;
+    double z = 3;
+}
+
+message Pedestrian{
+    uint32 id = 1;
+    double speed = 2;
+    double yaw = 3;
+    Coordinate pos = 4;
+}
+
+enum TrafficLightStatus{
+    status_unknow = 0;
+    status_red = 1;
+    status_yellow = 2;
+    status_green = 3;
+}
+// enum TrafficLightStatus{
+//     status_red = 0;
+//     status_yellow = 1;
+//     status_green = 2;
+// }
+
+message TrafficLight{
+    uint32 id = 1;
+    TrafficLightStatus status = 2;
+}
+
+// enum VehicleTurn{
+//     turn_unknow = 0;
+//     turn_left = 1;
+//     turn_straight = 2;
+//     turn_right = 3;
+// }
+
+// enum VehicleType{
+//     type_unknow = 0;
+//     type_car = 1;
+//     type_bus = 2;
+//     type_truck = 3;
+//     type_bicycle = 4;
+//     type_tricycle = 5;
+// }
+
+enum VehicleType{
+    type_car = 0;
+    type_bus = 1;
+    type_truck = 2;
+    type_bicycle = 3;
+    type_tricycle = 4;
+}
+
+// message Vehicle{
+//     int32 direction = 1;
+//     uint32 id = 2;
+//     Coordinate pos = 3;
+//     Coordinate size = 4;
+//     double speed = 5;
+//     VehicleTurn turn = 6;
+//     VehicleType type = 7;
+//     double yaw = 8;
+// }
+
+// message Vehicle{
+//     uint32 id = 1;
+//     Coordinate pos = 2;
+//     Coordinate size = 3;
+//     double speed = 4;
+//     VehicleType type = 5;
+//     double yaw = 6;
+// }
+
+message Vehicle{
+    uint32 id = 1;
+    Coordinate pos = 2;
+    double speed = 3;
+    VehicleType type = 4;
+    double yaw = 5;
+}
+
+message WsFrameData{
+    uint32 frame_id = 1;
+    repeated Pedestrian pedestrians = 2;
+    repeated TrafficLight traffic_lights = 3;
+    repeated Vehicle vehicles = 4;
+    uint32 is_last = 5;
+}

@@ -25,7 +25,7 @@ export const dreawPaking = (points: any[], color: any, group: any) => {
     group.add(line)
   }
   
-  export const createTexture = (img: any, item: { width: any; length: any; x: any; y: number; hdg: number }) => {
+export const createTexture = (img: any, item: { width: any; length: any; x: any; y: number; hdg: number }) => {
     // 使用TextureLoader加载图片
     const textureLoader = new (THREE as any).TextureLoader()
     const texture = textureLoader.load(img)
@@ -150,7 +150,7 @@ export const MeshLineRoadMark = (item: { outline: any[]; outlineWidth: number; v
   /**
  * 创建几何体
  */
-  export function createGeometry(pos: any[], color: any, z: number = 0.01) {
+export function createGeometry(pos: any[], color: any, z: number = 0.01) {
 	// 平面顶点（x1, y1, x2, y2, ..., xn, yn）
 	const flatPoints = pos.map((p: any) => [p.x, p.y]).flat()
 	// 三角形索引
@@ -189,7 +189,8 @@ export const MeshLineRoadMark = (item: { outline: any[]; outlineWidth: number; v
  * 合并几何体
  */
 export function mergeGeometries(geometryList: any[], opacity: number = 1.0) {
-	const attr = opacity !== 1 ? { transparent: true, opacity } : {}
+  console.log('mergeGeometries opacity', opacity)
+	const attr = opacity != 1 ? { transparent: true, opacity } : {}
 	const material = new (THREE as any).MeshBasicMaterial({
 		vertexColors: true,
 		side: (THREE as any).DoubleSide,
