@@ -9,7 +9,8 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { Euler } from 'three'
+  import * as THREE from 'three'
+  const Euler = (THREE as any).Euler
   import { ref, onMounted, onBeforeUnmount } from 'vue'
   import { MODAL_TO_URL, FBX_URL, GLB_URL } from '@/utils/modelConst'
   // import { MODAL_TO_URL } from '@/utils/imgConst'

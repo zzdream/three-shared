@@ -1,6 +1,6 @@
 {
   "name": "@threejs-shared/protobuf",
-  "version": "0.1.15",
+  "version": "0.1.17",
   "description": "Protobuf manager for loading and parsing proto files",
   "type": "module",
   "main": "dist/index.js",

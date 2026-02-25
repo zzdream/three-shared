@@ -1,6 +1,6 @@
 {
   "name": "@threejs-shared/core-engine",
-  "version": "0.1.15",
+  "version": "0.1.17",
   "description": "Three.js engine core without binding to specific three version",
   "type": "module",
   "main": "dist/index.js",
