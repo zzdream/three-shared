@@ -123,6 +123,8 @@ export interface XodrMapInitializerResult {
 	objectGroup: any
 	/** 信号组 */
 	signalGroup: any
+	/** 信号模型 */
+	signalModel: any
 	/** 地面组 */
 	ground: any | null
 	/** 天空组 */
@@ -306,7 +308,7 @@ export class XodrMapInitializer {
 		const { ground, sky } = await this.createGroundAndSky(boundingBox)
 
 		// 5. 加载信号组和对象组
-		const { signalGroup, objectGroup } = await this.loadSignalsAndObjects()
+		const { signalGroup, objectGroup, signalModel } = await this.loadSignalsAndObjects()
 
 		// 6. 初始化完成后，立即更新一次可见性（如果启用了可见性控制）
 		// 确保初始状态正确，不经过节流
@@ -319,6 +321,7 @@ export class XodrMapInitializer {
 			lanePathGroup,
 			objectGroup,
 			signalGroup,
+			signalModel,
 			ground,
 			sky,
 			boundingBox,
@@ -438,10 +441,10 @@ export class XodrMapInitializer {
 	 * 加载信号组和对象组
 	 * @returns 返回信号组和对象组
 	 */
-	private async loadSignalsAndObjects(): Promise<{ signalGroup: any; objectGroup: any }> {
+	private async loadSignalsAndObjects(): Promise<{ signalGroup: any; objectGroup: any, signalModel: any }> {
 		let signalGroup: any = null
 		let objectGroup: any = null
-
+		let signalModel: any = {}
 		// 添加信号组
 		if (this.options.signal && this.options.modalToUrl && Object.keys(this.options.modalToUrl).length > 0) {
 			const signalResult = await drawSignals(
@@ -462,6 +465,9 @@ export class XodrMapInitializer {
 				this.engine.scene.add(signalGroup)
 				// 保存信号组引用
 				this.currentGroups.signalGroup = signalGroup
+			}
+			if (signalResult?.signalModel) {
+				signalModel = signalResult.signalModel
 			}
 		}
 
@@ -505,7 +511,7 @@ export class XodrMapInitializer {
 			}
 		}
 
-		return { signalGroup, objectGroup }
+		return { signalGroup, objectGroup, signalModel }
 	}
 
 	/**
@@ -543,7 +549,7 @@ export class XodrMapInitializer {
 		const { ground, sky } = await this.createGroundAndSky(boundingBox)
 
 		// 4. 加载信号组和对象组
-		const { signalGroup, objectGroup } = await this.loadSignalsAndObjects()
+		const { signalGroup, objectGroup, signalModel } = await this.loadSignalsAndObjects()
 
 		// 5. 初始化完成后，立即更新一次可见性（如果启用了可见性控制）
 		// 确保初始状态正确，不经过节流
@@ -556,6 +562,7 @@ export class XodrMapInitializer {
 			lanePathGroup,
 			objectGroup,
 			signalGroup,
+			signalModel,
 			ground,
 			sky,
 			boundingBox,

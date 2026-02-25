@@ -81,8 +81,8 @@ export const drawObjects = async (MODAL_TO_URL: any, cache: { useCache: boolean,
     }
     await Promise.all(asyncTasks)
     return {objectGroup, objectModel}
-}
-export const drawSignals = async (MODAL_TO_URL: any, isLoadStatuslight:{
+} 
+export const drawSignals = async (MODAL_TO_URL: any, isLoadStatuslight: {
   isLoad: boolean,
   states: string[]
 } = {

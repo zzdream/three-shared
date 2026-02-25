@@ -889,7 +889,7 @@
             <object id="129" type="pole" name="Cantilever_Pole" dynamic="no" validLength="0.000000000000" orientation="none" s="15.238974945073" t="-31.405822896598" zOffset="0.000000000000" length="0.266000000000" width="10.000000000000" height="6.000000000000" hdg="-0.808613369271" pitch="0.000000000000" roll="0.000000000000" />
         </objects>
         <signals>
-            <signal id="21" s="18.490529625477" t="-25.716072520550" name="ç«–æŽ’å·¦è½¬ç¯" dynamic="yes" orientation="+" zOffset="5.500000000000" hOffset="5.336901017436" type="1000011" country="OpenDRIVE" subtype="10" height="1.580000000000" width="0.600000000000" pitch="0.000000000000" roll="0.000000000000" text="" />
+            <signal id="21" s="18.490529625477" t="-25.716072520550" name="竖排左转灯" dynamic="yes" orientation="+" zOffset="5.500000000000" hOffset="5.336901017436" type="1000011" country="OpenDRIVE" subtype="10" height="1.580000000000" width="0.600000000000" pitch="0.000000000000" roll="0.000000000000" text="" />
         </signals>
         <surface />
     </road>
@@ -1202,7 +1202,7 @@
         </lanes>
         <objects />
         <signals>
-            <signal id="20" s="21.423694448621" t="18.964497356891" name="ç«–æŽ’å³è½¬ç¯" dynamic="yes" orientation="-" zOffset="5.500000000000" hOffset="4.361406848292" type="1000011" country="OpenDRIVE" subtype="20" height="1.580000000000" width="0.600000000000" pitch="0.000000000000" roll="0.000000000000" text="" />
+            <signal id="20" s="21.423694448621" t="18.964497356891" name="竖排右转灯" dynamic="yes" orientation="-" zOffset="5.500000000000" hOffset="4.361406848292" type="1000011" country="OpenDRIVE" subtype="20" height="1.580000000000" width="0.600000000000" pitch="0.000000000000" roll="0.000000000000" text="" />
         </signals>
         <surface />
     </road>
@@ -1641,7 +1641,7 @@
         </lanes>
         <objects />
         <signals>
-            <signal id="22" s="35.901309250627" t="-7.668795543077" name="ç«–æŽ’ç›´è¡Œç¯" dynamic="yes" orientation="+" zOffset="5.500000000000" hOffset="6.254606331675" type="1000011" country="OpenDRIVE" subtype="30" height="1.580000000000" width="0.600000000000" pitch="0.000000000000" roll="0.000000000000" text="" />
+            <signal id="22" s="35.901309250627" t="-7.668795543077" name="竖排直行灯" dynamic="yes" orientation="+" zOffset="5.500000000000" hOffset="6.254606331675" type="1000011" country="OpenDRIVE" subtype="30" height="1.580000000000" width="0.600000000000" pitch="0.000000000000" roll="0.000000000000" text="" />
         </signals>
         <surface />
     </road>

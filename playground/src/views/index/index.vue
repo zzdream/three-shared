@@ -18,7 +18,10 @@
   import { XodrMapInitializer } from '@threejs-shared/xodr'
   import { ProtobufWebSocketClient, MessageFormat, ProtobufPlaybackClient } from '@threejs-shared/protobuf'
   import type { WebSocketCallbacks } from '@threejs-shared/protobuf'
+  import type { XodrMapInitializerResult } from '@threejs-shared/xodr'
   const containerRef = ref<HTMLElement | null>(null)
+  /** XODR 初始化结果，包含 signalGroup、lanePathGroup 等，初始化完成后可从这里取 */
+  const xodrResult = ref<XodrMapInitializerResult | any>({})
 
   // Three.js 相关变量
   let engine: ThreeEngine | null = null
@@ -172,6 +175,8 @@
       onFrame: async (frameData: any) => {
         if (!engine?.scene) return
         const objects = frameData.objects ?? []
+        const trafficLights = frameData.trafficLights ?? [] 
+        console.log(trafficLights)
         idsThisFrame.clear()
         for (let i = 0; i < objects.length; i++) {
           const obj = objects[i]
@@ -205,6 +210,21 @@
         vehicleMap.forEach((vehicle, id) => {
           if (!idsThisFrame.has(id)) vehicle.visible = false
         })
+        for (let i = 0; i < trafficLights.length; i++) {
+          const { id, status = 0 } = trafficLights[i]
+            const signal = xodrResult.value.signalGroup.children.find((item: any) => item.__attr.id == id)
+            if (!signal) return
+            if (signal.__status != status) {
+              const key = signal.__attr.name + '_' + status
+              const model = xodrResult.value.signalModel[key].clone()
+              model.__attr = signal.__attr
+              model.__status = status
+              model.position.copy(signal.position)
+              model.rotation.copy(signal.rotation)
+              xodrResult.value.signalGroup.remove(signal)
+              xodrResult.value.signalGroup.add(model)
+            }
+        }
         // 相机在第一辆车的正后上方（沿车头反方向，不偏左不偏右）
         if (objects.length > 0 && engine.camera && engine.controls) {
           const first = objects[0]
@@ -325,7 +345,7 @@
         },
         // 配置项：XODR 解析相关配置
         parseXodr: {
-          path: '/road-all.xodr',
+          path: '/practice.xodr',
           step: 4, // 解析步长
           chunked: {
             chunkSize: 5 * 1024 * 1024, // 5MB 每块
@@ -379,6 +399,8 @@
         ? await initializer.reloadXodr(xodrPath) 
         : await initializer.initialize()
 
+      xodrResult.value = result
+      console.log(xodrResult.value)
       // 可见性控制已通过配置自动启用，会在动画循环中自动更新
 
       console.log('XODR 地图初始化完成', result)
