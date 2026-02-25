@@ -49,9 +49,9 @@ pnpm preview
 
 ## 演示视频
 
-- **观看方式**：点击下方链接，在 GitHub 文件页中**直接在浏览器内播放**。
-- **说明**：当前视频为 MP4、约 8.6MB，点击即可播放；请从仓库 README 或文件树中点进 `overview/video.mp4`，勿用 raw 链接（否则会变成下载）。
-  - [观看演示视频](./overview/video.mp4)
+- **观看方式**：点击下方链接。GitHub 仅对**约 3MB 以内**的文件在页面内嵌播放，更大文件会提示 “can’t show files that are this big”，故提供小体积版本便于直接播放。
+  - [在页面内直接播放](./overview/video-preview.mp4)（约 3MB 内，推荐）
+  - [完整版下载](./overview/video.mp4)（约 8MB，若需下载后观看）
 
 
 ---
