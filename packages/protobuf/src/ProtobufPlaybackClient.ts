@@ -82,6 +82,7 @@ export class ProtobufPlaybackClient {
 
   constructor(config: ProtobufPlaybackClientConfig) {
     this.config = config
+    console.log('config', config)
     this.protoBufManager = new ProtoBufManager(config.protoBufOptions)
   }
 
@@ -91,6 +92,7 @@ export class ProtobufPlaybackClient {
    * @returns Promise<void>
    */
   async loadAndPlay(callbacks?: ProtobufPlaybackCallbacks): Promise<void> {
+    console.log('loadAndPlay', this.config.fileOptions)
     try {
       // 1. 下载文件
       const fileContent = await loadXodr(this.config.fileOptions) as ArrayBuffer | Uint8Array
@@ -100,7 +102,7 @@ export class ProtobufPlaybackClient {
         this.config.protoPath,
         this.config.messageType
       )
-
+      console.log('protobufType', protobufType)
       // 3. 解码文件内容
       let decodedData: any
       try {

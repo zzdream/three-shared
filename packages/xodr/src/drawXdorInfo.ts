@@ -34,7 +34,6 @@ export const drawObjects = async (MODAL_TO_URL: any, cache: { useCache: boolean,
             })
           }
         } else {
-          console.log(key, 'key')
           if (key == 'Tunnel_door') continue
           const resourcePath = MODAL_TO_URL[key]
           if (!resourcePath) {
@@ -57,7 +56,6 @@ export const drawObjects = async (MODAL_TO_URL: any, cache: { useCache: boolean,
             imageClone.rotation.z = (item.hdg || 0) - Math.PI / 2
             objectGroup.add(imageClone)
           } else if (isModel) {
-            console.log(isModel, 'isModel')
             // 如果是模型，使用模型加载逻辑
             if (objectModel[key]) {
               objectGroup.add(createModelClone(objectModel[key], item))
@@ -66,7 +64,6 @@ export const drawObjects = async (MODAL_TO_URL: any, cache: { useCache: boolean,
                 // 根据文件扩展名判断使用 FBX 还是 GLB 加载方法
                 const isFBX = /\.(fbx|FBX)$/i.test(pathStr)
                 const isGLB = /\.(glb|gltf)$/i.test(pathStr)
-                console.log(isFBX, isGLB, 'isFBX, isGLB')
                 if (isFBX) {
                   objectModel[key] = await createCacheModalFBX(resourcePath, cache)
                 } else if (isGLB) {

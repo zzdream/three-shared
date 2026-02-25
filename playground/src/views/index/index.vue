@@ -1,7 +1,7 @@
 <template>
   <div class="index-container">
     <div ref="containerRef" class="three-container"></div>
-    <button @click="switchXodr('/11.xodr')" style="position: absolute; top: 10px; left: 10px; z-index: 1000;">切换XODR</button>
+    <button @click="switchXodr('/practice.xodr')" style="position: absolute; top: 10px; left: 10px; z-index: 1000;">切换XODR</button>
     <button @click="initProtobufWebSocket()" style="position: absolute; top: 10px; left: 100px; z-index: 1000;">仿真</button>
     <button @click="playback()" style="position: absolute; top: 10px; left: 150px; z-index: 1000;">回看</button>
     <button @click="loadModelFBX()" style="position: absolute; top: 10px; left: 200px; z-index: 1000;">fbx模型</button>
@@ -147,13 +147,13 @@
       messageType: 'SimulationMonitor.SimulationMonitorBag',
       // 文件下载配置
       fileOptions: {
-        url: `/api/simpro/simtask/pb/download/?task_id=14532&scene_id=1276197`,
+        url: process.env.VITE_P_TO_B + `/1800091_simpro.pb`,
         responseType: 'arrayBuffer',
         useStreaming: false,
-        header: {
-          Authorization: `JWT ${localStorage.getItem('token') as string}`,
-          'X-Project-Id': localStorage.getItem('X-Project-Id') as string || '',
-        }
+        // header: {
+        //   Authorization: `JWT ${localStorage.getItem('token') as string}`,
+        //   'X-Project-Id': localStorage.getItem('X-Project-Id') as string || '',
+        // }
       },
       // 播放配置
       frequency: 50,
