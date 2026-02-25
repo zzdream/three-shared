@@ -367,7 +367,7 @@ export const MODAL_TO_URL: any = {
 }
 
 const vehicle_fbx = '/models/vehicle/'
-export const FBX_URL = {
+export const FBX_URL: any = {
   默认: vehicle_fbx + 'default.fbx',
   '默认 黑色': vehicle_fbx + 'default_black.fbx',
   '默认 白色': vehicle_fbx + 'default_white.fbx',

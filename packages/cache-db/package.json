@@ -1,6 +1,6 @@
 {
   "name": "@threejs-shared/cache-db",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "description": "IndexedDB cache for XODR and other data",
   "type": "module",
   "main": "dist/index.js",

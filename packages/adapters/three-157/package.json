@@ -1,6 +1,6 @@
 {
   "name": "@threejs-shared/three-adapter-157",
-  "version": "0.1.12",
+  "version": "0.1.14",
   "description": "Three.js adapter for r157",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

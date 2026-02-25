@@ -122,7 +122,6 @@ export class ProtoBufManager {
     }
 
     const cacheKey = `${protoFilePath}-${messageType}`
-    console.log('cacheKey', cacheKey)
     // 如果已缓存，直接返回
     if (this.protoCache.has(cacheKey)) {
       this.log(`Using cached proto type: ${messageType}`)

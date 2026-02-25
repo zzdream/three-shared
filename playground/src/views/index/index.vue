@@ -9,6 +9,7 @@
   </div>
 </template>
 <script setup lang="ts">
+  import { Euler } from 'three'
   import { ref, onMounted, onBeforeUnmount } from 'vue'
   import { MODAL_TO_URL, FBX_URL, GLB_URL } from '@/utils/modelConst'
   // import { MODAL_TO_URL } from '@/utils/imgConst'
@@ -147,22 +148,80 @@
       messageType: 'SimulationMonitor.SimulationMonitorBag',
       // 文件下载配置
       fileOptions: {
-        url: process.env.VITE_P_TO_B + `/1800091_simpro.pb`,
+        url: '/pb', // 1800091_simpro.pb
+        // url: '/api/simpro/simtask/pb/download/?task_id=13800&scene_id=1800091',
         responseType: 'arrayBuffer',
         useStreaming: false,
-        // header: {
-        //   Authorization: `JWT ${localStorage.getItem('token') as string}`,
-        //   'X-Project-Id': localStorage.getItem('X-Project-Id') as string || '',
-        // }
+        header: {
+          Authorization: `JWT ${localStorage.getItem('token') as string}`,
+          'X-Project-Id': localStorage.getItem('X-Project-Id') as string || '',
+        }
       },
       // 播放配置
       frequency: 50,
     })
 
+    // 按 entryName 缓存车型模板，相同车型只加载一次
+    const modelCache = new Map<string, any>()
+    // 按 id 缓存场景中的车辆实例，同一 id 为同一辆车（id 统一转成字符串，避免 1 和 "1" 被当成两辆车）
+    const vehicleMap = new Map<string, any>()
+    // 当前帧出现的 id 集合，用于隐藏本帧未出现的车（避免起点等处的“幽灵车”一直显示）
+    const idsThisFrame = new Set<string>()
     // 加载并开始播放
     await playbackClient.loadAndPlay({
-      onFrame: (frameData: any) => {
-        console.log('Frame data:', frameData)
+      onFrame: async (frameData: any) => {
+        if (!engine?.scene) return
+        const objects = frameData.objects ?? []
+        idsThisFrame.clear()
+        for (let i = 0; i < objects.length; i++) {
+          const obj = objects[i]
+          const id = String(obj.id ?? i)
+          idsThisFrame.add(id)
+          const entryName = obj.entryName
+          const coord = obj.coord ?? {}
+          const pose = obj.pose ?? {}
+          const x = coord.x ?? 0
+          const y = coord.y ?? 0
+          const z = coord.z ?? 0
+          const h = pose.h ?? 0
+          const r = pose.r ?? 0
+          const p = pose.p ?? 0
+          let vehicle = vehicleMap.get(id)
+          if (!vehicle) {
+            let template = modelCache.get(entryName)
+            if (!template) {
+              template = await createModalFBX(process.env.VITE_P_TO_B + FBX_URL[entryName]) as any
+              modelCache.set(entryName, template)
+            }
+            vehicle = template.clone(true)
+            engine.scene.add(vehicle)
+            vehicleMap.set(id, vehicle)
+          }
+          vehicle.visible = true
+          vehicle.position.set(x, z, -y)
+          vehicle.rotation.copy(new Euler(r || 0, h || 0, p || 0, 'XYZ'))
+        }
+        // 本帧未出现的车设为不可见，避免起点等处只出现一次的静态车一直显示
+        vehicleMap.forEach((vehicle, id) => {
+          if (!idsThisFrame.has(id)) vehicle.visible = false
+        })
+        // 相机在第一辆车的正后上方（沿车头反方向，不偏左不偏右）
+        if (objects.length > 0 && engine.camera && engine.controls) {
+          const first = objects[0]
+          const coord0 = first.coord ?? {}
+          const pose0 = first.pose ?? {}
+          const cx = coord0.x ?? 0
+          const cy = coord0.y ?? 0
+          const cz = coord0.z ?? 0
+          const ch = pose0.h ?? 0
+          const dist = 20
+          const height = 5
+          // 车头方向按仿真常用约定：h=0 为 +X，后方 = (-cos(h), -sin(h)) 对应 (x, z)
+          const backX = -Math.cos(ch) * dist
+          const backZ = Math.sin(ch) * dist
+          engine.camera.position.set(cx + backX, cz + height, -cy + backZ)
+          engine.controls.target.set(cx, cz, -cy)
+        }
       },
       onProcess: (currentSecond: number) => {
         console.log('Current second:', currentSecond)
