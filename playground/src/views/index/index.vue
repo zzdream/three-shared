@@ -243,7 +243,7 @@
         initializer = new XodrMapInitializer(engine, {
         basePath: process.env.VITE_P_TO_B || '',
         wasmPath: '/wasm/OdrHandle.js',
-        // modalToUrl: MODAL_TO_URL,
+        modalToUrl: MODAL_TO_URL,
         // 可见性控制配置：根据相机高度自动控制组的可见性
         // 库内部会自动管理所有相关组，用户只需配置阈值即可， 只控制了线 和 object 和 signal
         visibilityControl: {

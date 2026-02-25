@@ -4,6 +4,12 @@
 
 ---
 
+## Playground（示例应用）
+
+**[playground](./playground/)** 为本仓库的示例应用，用于演示各包在 Vue 3 + Vite + Three.js 下的集成方式（XODR 加载与渲染、仿真回放、引擎与 HDR 环境等）。运行方式与渲染效果见 [playground/README.md](./playground/README.md)。
+
+---
+
 ## 包列表与文档
 
 | 包名 | 说明 | 文档 |

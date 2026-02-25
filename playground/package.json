@@ -2,6 +2,7 @@
   "name": "playground",
   "private": true,
   "version": "0.0.20",
+  "description": "Three.js 共享库示例应用：XODR 地图加载与渲染、仿真回放、引擎与 HDR 环境演示",
   "lint-staged": {
     "src/**/*.{js,jsx,vue,ts,tsx}": [
       "npm run eslint"
