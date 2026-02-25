@@ -8,13 +8,13 @@
 
 | 包名 | 说明 | 文档 |
 |------|------|------|
-| **@threejs-shared/cache-db** | IndexedDB 缓存（XODR 等），支持 TTL | [cache-db.md](./cache-db.md) |
-| **@threejs-shared/three-adapter-157** | Three.js r157 的 HDR/RGBE Loader 适配 | [adapters.md](./adapters.md) |
-| **@threejs-shared/three-adapter-182** | Three.js r182 的 HDR Loader 适配 | [adapters.md](./adapters.md) |
-| **@threejs-shared/core-engine** | 引擎核心：场景/相机/渲染器/控制器/光照/模型/地面天空 | [core-engine.md](./core-engine.md) |
-| **@threejs-shared/protobuf** | Proto 加载、WebSocket 收发、回放定时器 | [protobuf.md](./protobuf.md) |
-| **@threejs-shared/wasm** | OpenDRIVE WASM 桥接：加载 WASM、注入 XODR、获取道路/信号/对象/隧道 | [wasm.md](./wasm.md) |
-| **@threejs-shared/xodr** | XODR 加载/解析/渲染、对象与信号绘制、地图初始化器 | [xodr.md](./xodr.md) |
+| **@threejs-shared/cache-db** | IndexedDB 缓存（XODR 等），支持 TTL | [cache-db.md](./docs/packages/cache-db.md) |
+| **@threejs-shared/three-adapter-157** | Three.js r157 的 HDR/RGBE Loader 适配 | [adapters.md](./docs/packages/adapters.md) |
+| **@threejs-shared/three-adapter-182** | Three.js r182 的 HDR Loader 适配 | [adapters.md](./docs/packages/adapters.md) |
+| **@threejs-shared/core-engine** | 引擎核心：场景/相机/渲染器/控制器/光照/模型/地面天空 | [core-engine.md](./docs/packages/core-engine.md) |
+| **@threejs-shared/protobuf** | Proto 加载、WebSocket 收发、回放定时器 | [protobuf.md](./docs/packages/protobuf.md) |
+| **@threejs-shared/wasm** | OpenDRIVE WASM 桥接：加载 WASM、注入 XODR、获取道路/信号/对象/隧道 | [wasm.md](./docs/packages/wasm.md) |
+| **@threejs-shared/xodr** | XODR 加载/解析/渲染、对象与信号绘制、地图初始化器 | [xodr.md](./docs/packages/xodr.md) |
 
 ---
 
@@ -58,4 +58,4 @@ three-adapter-182 → core-engine
 
 ## 发布
 
-包发布流程见仓库根目录 [PUBLISH.md](../PUBLISH.md)。
+包发布流程见 [PUBLISH.md](./docs/PUBLISH.md)。
