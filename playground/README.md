@@ -47,11 +47,9 @@ pnpm preview
 
 ---
 
-## 演示视频
+## 演示动图
 
-- **观看方式**：点击下方链接。GitHub 仅对**约 3MB 以内**的文件在页面内嵌播放，更大文件会提示 “can’t show files that are this big”，故提供小体积版本便于直接播放。
-  - [在页面内直接播放](./overview/video-preview.mp4)（约 3MB 内，推荐）
-  - [完整版下载](./overview/video.mp4)（约 8MB，若需下载后观看）
+![Playground 演示动图](./overview/preview.gif)
 
 
 ---
