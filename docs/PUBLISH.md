@@ -2,6 +2,8 @@
 
 首次发布前先登录：`npm login`，确认：`npm whoami`。scope 包发布时需加 `--access public`。
 
+**若报错 `Access token expired or revoked` 或发布时出现 404**：说明 npm 登录已过期，请重新执行 `npm login`，登录成功后再执行发布。
+
 ---
 
 ## 一、统一发布（一次发布所有包）
