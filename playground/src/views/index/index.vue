@@ -14,8 +14,8 @@
   import { ref, onMounted, onBeforeUnmount } from 'vue'
   import { MODAL_TO_URL, FBX_URL, GLB_URL } from '@/utils/modelConst'
   // import { MODAL_TO_URL } from '@/utils/imgConst'
-  import { ThreeEngine, createModalGLB, createModalFBX, createCacheModalGLB,createCacheModalFBX, pauseModelAnimation, resumeModelAnimation } from '@threejs-shared/core-engine'
-  console.log(MODAL_TO_URL,createCacheModalGLB)
+  import { ThreeEngine, createModalGLB, createModalFBX, createCacheModalGLB,createCacheModalFBX, pauseModelAnimation, resumeModelAnimation, resetSkinnedMeshesToBindPose } from '@threejs-shared/core-engine'
+  console.log(MODAL_TO_URL,createCacheModalGLB,createCacheModalFBX)
   import { XodrMapInitializer } from '@threejs-shared/xodr'
   import { ProtobufWebSocketClient, MessageFormat, ProtobufPlaybackClient } from '@threejs-shared/protobuf'
   import type { WebSocketCallbacks } from '@threejs-shared/protobuf'
@@ -216,8 +216,10 @@
           vehicle.rotation.copy(new Euler(r || 0, h || 0, p || 0, 'XYZ'))
 
           // 根据速度控制骨骼动画：speed 为 0 立正不动，否则继续播放
-          if (speed === 0) {
+          if (speed == 0) {
             pauseModelAnimation(vehicle)
+            // 恢复到绑定/默认姿态（引擎封装）
+            resetSkinnedMeshesToBindPose(vehicle)
           } else {
             resumeModelAnimation(vehicle)
           }

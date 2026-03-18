@@ -32,6 +32,7 @@ export {
   updateSceneAnimationMixers,
   pauseModelAnimation,
   resumeModelAnimation,
+  resetSkinnedMeshesToBindPose,
 } from './skeletonAnimation'
 
 // ========== 其他类 ==========

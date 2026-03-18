@@ -65,3 +65,16 @@ export function resumeModelAnimation(model: any) {
   })
 }
 
+/**
+ * 将模型中的所有 SkinnedMesh 恢复到绑定/默认姿态（bind pose）
+ * 常用于暂停动画后让角色回到初始姿势，避免停在中间帧
+ */
+export function resetSkinnedMeshesToBindPose(object3D: any) {
+  if (!object3D || typeof object3D.traverse !== 'function') return
+  object3D.traverse((child: any) => {
+    if (child?.isSkinnedMesh && typeof child.pose === 'function') {
+      child.pose()
+    }
+  })
+}
+
