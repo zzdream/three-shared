@@ -1,6 +1,6 @@
 # @threejs-shared/core-engine
 
-Three.js 引擎核心：不绑定具体 Three 版本，统一管理场景、相机、渲染器、控制器、光照、模型加载与 XODR 地面/天空等。
+Three.js 引擎核心：不绑定具体 Three 版本，统一管理场景、相机、渲染器、控制器、光照、模型加载、骨骼动画与 XODR 地面/天空等。
 
 ## 安装
 
