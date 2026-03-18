@@ -84,25 +84,33 @@ export const drawObjects = async (MODAL_TO_URL: any, cache: { useCache: boolean,
 } 
 export const drawSignals = async (MODAL_TO_URL: any, isLoadStatuslight: {
   isLoad: boolean,
-  states: string[]
+  states: string[],
+  /** 业务方可传入的交通灯类型列表，用于区分「交通灯」和「交通标志」 */
+  trafficLightTypes?: string[]
 } = {
   isLoad: true,
   states: ['_0', '_1', '_2']
 }, cache: { useCache: boolean, database: string, table: string }) => {
-    const traffic_light_type = [
-        '车道信号灯',
-        '横排全方位灯',
-        '横向右转灯',
-        '横向直行灯',
-        '横向左转灯',
-        '竖排全方位灯',
-        '竖排直行灯',
-        '竖排左转灯',
-        '竖排右转灯',
-        '单车指示灯',
-        '竖排人行灯',
-        '双色指示灯'
-      ]
+    // 默认交通灯类型（向后兼容原行为）
+    const defaultTrafficLightTypes = [
+      '车道信号灯',
+      '横排全方位灯',
+      '横向右转灯',
+      '横向直行灯',
+      '横向左转灯',
+      '竖排全方位灯',
+      '竖排直行灯',
+      '竖排左转灯',
+      '竖排右转灯',
+      '单车指示灯',
+      '竖排人行灯',
+      '双色指示灯',
+    ]
+    // 优先使用业务传入的 trafficLightTypes，其次使用默认列表
+    const traffic_light_type =
+      isLoadStatuslight?.trafficLightTypes?.length
+        ? isLoadStatuslight.trafficLightTypes
+        : defaultTrafficLightTypes
     const signalList = await getXodrSignalsInfo()
     console.log('signalList', signalList)
     if (!signalList?.length) {
@@ -110,6 +118,7 @@ export const drawSignals = async (MODAL_TO_URL: any, isLoadStatuslight: {
         return
     }
     const signalGroup = createGroup()
+    const trafficLightGroup = createGroup()
     const signalModel: any = {}
     const loadTrafficSignModel = async (key: string, item: any) => {
       if (MODAL_TO_URL[key]?.indexOf('.') == -1) return null
@@ -160,7 +169,7 @@ export const drawSignals = async (MODAL_TO_URL: any, isLoadStatuslight: {
       const modelClone = await loadTrafficSignModel(key, item)
       if (modelClone) {
         modelClone.__status = undefined // 无状态
-        signalGroup.add(modelClone)
+        trafficLightGroup.add(modelClone)
       }
       // 预加载状态灯（包括图片和模型）
       if (isLoadStatuslight?.isLoad) {
@@ -211,5 +220,5 @@ export const drawSignals = async (MODAL_TO_URL: any, isLoadStatuslight: {
         }) || []
     )
     await Promise.all(promises)
-    return {signalGroup, signalModel}
+    return {signalGroup, signalModel, trafficLightGroup}
 }

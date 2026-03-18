@@ -14,8 +14,8 @@
   import { ref, onMounted, onBeforeUnmount } from 'vue'
   import { MODAL_TO_URL, FBX_URL, GLB_URL } from '@/utils/modelConst'
   // import { MODAL_TO_URL } from '@/utils/imgConst'
-
-  import { ThreeEngine, createModalGLB, createModalFBX } from '@threejs-shared/core-engine'
+  import { ThreeEngine, createModalGLB, createModalFBX, createCacheModalGLB,createCacheModalFBX, pauseModelAnimation, resumeModelAnimation } from '@threejs-shared/core-engine'
+  console.log(MODAL_TO_URL,createCacheModalGLB)
   import { XodrMapInitializer } from '@threejs-shared/xodr'
   import { ProtobufWebSocketClient, MessageFormat, ProtobufPlaybackClient } from '@threejs-shared/protobuf'
   import type { WebSocketCallbacks } from '@threejs-shared/protobuf'
@@ -165,9 +165,10 @@
       frequency: 50,
     })
 
-    // 按 entryName 缓存车型模板，相同车型只加载一次
-    const modelCache = new Map<string, any>()
+    // // 按 entryName 缓存车型模板，相同车型只加载一次
+    // const modelCache = new Map<string, any>()
     // 按 id 缓存场景中的车辆实例，同一 id 为同一辆车（id 统一转成字符串，避免 1 和 "1" 被当成两辆车）
+    // 这里存的是 Promise 或已解析的实例，以避免并发多次创建
     const vehicleMap = new Map<string, any>()
     // 当前帧出现的 id 集合，用于隐藏本帧未出现的车（避免起点等处的“幽灵车”一直显示）
     const idsThisFrame = new Set<string>()
@@ -177,35 +178,49 @@
         if (!engine?.scene) return
         const objects = frameData.objects ?? []
         const trafficLights = frameData.trafficLights ?? [] 
-        console.log(trafficLights)
+        console.log(objects)
         idsThisFrame.clear()
         for (let i = 0; i < objects.length; i++) {
           const obj = objects[i]
           const id = String(obj.id ?? i)
           idsThisFrame.add(id)
-          const entryName = obj.entryName
           const coord = obj.coord ?? {}
           const pose = obj.pose ?? {}
+          const speed = obj.speed ?? 0
           const x = coord.x ?? 0
           const y = coord.y ?? 0
           const z = coord.z ?? 0
           const h = pose.h ?? 0
           const r = pose.r ?? 0
           const p = pose.p ?? 0
-          let vehicle = vehicleMap.get(id)
+          let vehicle = await vehicleMap.get(id)
           if (!vehicle) {
-            let template = modelCache.get(entryName)
-            if (!template) {
-              template = await createModalFBX(process.env.VITE_P_TO_B + FBX_URL[entryName]) as any
-              modelCache.set(entryName, template)
-            }
-            vehicle = template.clone(true)
-            engine.scene.add(vehicle)
-            vehicleMap.set(id, vehicle)
+            // 先缓存 Promise，避免同一 id 在模型加载过程中被并发创建多次
+            const vehiclePromise = (async () => {
+              const v = await createCacheModalFBX(
+                process.env.VITE_P_TO_B + FBX_URL['cally'],
+                { useCache: true, database: 'practice', table: 'vehicle' },
+              ) as any
+              // const v = await createCacheModalGLB(
+              //   process.env.VITE_P_TO_B + GLB_URL['cally'],
+              //   { useCache: true, database: 'practice', table: 'vehicle' },
+              // ) as any
+              engine.scene.add(v)
+              return v
+            })()
+            vehicleMap.set(id, vehiclePromise)
+            vehicle = await vehiclePromise
           }
           vehicle.visible = true
           vehicle.position.set(x, z, -y)
           vehicle.rotation.copy(new Euler(r || 0, h || 0, p || 0, 'XYZ'))
+
+          // 根据速度控制骨骼动画：speed 为 0 立正不动，否则继续播放
+          if (speed === 0) {
+            pauseModelAnimation(vehicle)
+          } else {
+            resumeModelAnimation(vehicle)
+          }
         }
         // 本帧未出现的车设为不可见，避免起点等处只出现一次的静态车一直显示
         vehicleMap.forEach((vehicle, id) => {
@@ -213,7 +228,8 @@
         })
         for (let i = 0; i < trafficLights.length; i++) {
           const { id, status = 0 } = trafficLights[i]
-            const signal = xodrResult.value.signalGroup.children.find((item: any) => item.__attr.id == id)
+          if(xodrResult.value.trafficLightGroup?.children?.length) {
+            const signal = xodrResult.value.trafficLightGroup.children.find((item: any) => item.__attr.id == id)
             if (!signal) return
             if (signal.__status != status) {
               const key = signal.__attr.name + '_' + status
@@ -222,9 +238,10 @@
               model.__status = status
               model.position.copy(signal.position)
               model.rotation.copy(signal.rotation)
-              xodrResult.value.signalGroup.remove(signal)
-              xodrResult.value.signalGroup.add(model)
+              xodrResult.value.trafficLightGroup.remove(signal)
+              xodrResult.value.trafficLightGroup.add(model)
             }
+          }
         }
         // 相机在第一辆车的正后上方（沿车头反方向，不偏左不偏右）
         if (objects.length > 0 && engine.camera && engine.controls) {
@@ -295,8 +312,6 @@
       animate: {
         autoStart: true, // 自动启动动画循环
         callback: () => {
-          // 每帧执行的自定义逻辑
-          // 可见性控制会自动更新（如果已启用）
           initializer?.getVisibilityUpdateCallback()?.()
         },
       },
@@ -304,7 +319,6 @@
         enabled: true, // 启用窗口大小监听
       },
     })
-
   }
 
   /**
@@ -323,7 +337,7 @@
         initializer = new XodrMapInitializer(engine, {
         basePath: process.env.VITE_P_TO_B || '',
         wasmPath: '/wasm/OdrHandle.js',
-        modalToUrl: MODAL_TO_URL,
+        // modalToUrl: MODAL_TO_URL,
         // 可见性控制配置：根据相机高度自动控制组的可见性
         // 库内部会自动管理所有相关组，用户只需配置阈值即可， 只控制了线 和 object 和 signal
         visibilityControl: {
@@ -337,7 +351,7 @@
           // },
         },
         cache: {
-          enabled: false, // 启用缓存
+          enabled: true, // 启用缓存
           database: 'test',
           table: 'xodrData',
           field: 'road-all.xodr',
@@ -346,7 +360,7 @@
         },
         // 配置项：XODR 解析相关配置
         parseXodr: {
-          path: '/practice.xodr',
+          path: '/road-all.xodr',
           step: 4, // 解析步长
           chunked: {
             chunkSize: 5 * 1024 * 1024, // 5MB 每块
@@ -361,6 +375,7 @@
         // 配置项：信号相关配置
         signal: {
           states: ['_0', '_1', '_2'],
+          trafficLightTypes: ['车道信号灯', '横排全方位灯', '横向右转灯', '横向直行灯', '横向左转灯', '竖排全方位灯', '竖排直行灯', '竖排左转灯', '竖排右转灯', '单车指示灯', '竖排人行灯', '双色指示灯'],
         },
         // 配置项：隧道相关配置
         tunnel: {
@@ -379,7 +394,7 @@
         // 配置项：地面相关配置
         ground: {
           groundPath: '/ground.jpg',
-          scaleFactor: 50,
+          scaleFactor: 10,
         },
         // 配置项：天空相关配置
         sky: {
@@ -390,7 +405,6 @@
           const percent = ((loaded / total) * 100).toFixed(1)
           console.log(`加载进度: ${percent}% (${(loaded / 1024 / 1024).toFixed(2)}MB / ${(total / 1024 / 1024).toFixed(2)}MB)`)
           // 可以在这里更新 UI 进度条
-          // loadingProgress.value = parseFloat(percent)
         },
         })
       }
@@ -433,16 +447,58 @@
   if (typeof window !== 'undefined') {
     (window as any).switchXodr = switchXodr
   }
+  /**
+   * 把 GLB_URL 里的所有模型都加载出来，并按网格排布避免重叠
+   */
   const loadModelGLB = async () => {
-    const url = process.env.VITE_P_TO_B + (MODAL_TO_URL['自行车'] ?? GLB_URL['自行车'])
-    const model = await createModalGLB(url) as any
-    model.position.set(0, 0, 0)
-    engine?.scene.add(model)
+    if (!engine?.scene) return
+
+    const keys = Object.keys(GLB_URL)
+    const spacing = 8 // 模型之间的间距
+    const perRow = 10 // 每行模型数量
+
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]
+      const url = process.env.VITE_P_TO_B + GLB_URL[key]
+      try {
+        const model = (await createModalGLB(url)) as any
+        const row = Math.floor(i / perRow)
+        const col = i % perRow
+        // GLB 模型放在坐标系的一块区域（例如正 X、正 Z 象限）
+        model.position.set(col * spacing, 0, row * spacing)
+        engine.scene.add(model)
+      } catch (e) {
+        console.error('加载 GLB 模型失败:', key, url, e)
+      }
+    }
   }
+
+  /**
+   * 把 FBX_URL 里的所有模型都加载出来，并按网格排布，整体偏移一段距离，避免和 GLB 区域重叠
+   */
   const loadModelFBX = async () => {
-    const model = await createModalFBX(process.env.VITE_P_TO_B  + FBX_URL['自行车']) as any
-    model.position.set(0, 0, 3)
-    engine?.scene.add(model)
+    if (!engine?.scene) return
+
+    const keys = Object.keys(FBX_URL)
+    const spacing = 8
+    const perRow = 10
+    // 给整块 FBX 模型区域一个偏移，让它和 GLB 区域分开，例如往负 Z 方向移一点
+    const offsetX = 0
+    const offsetZ = -80
+
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]
+      const url = process.env.VITE_P_TO_B + FBX_URL[key]
+      try {
+        const model = (await createModalFBX(url)) as any
+        const row = Math.floor(i / perRow)
+        const col = i % perRow
+        model.position.set(offsetX + col * spacing, 0, offsetZ + row * spacing)
+        engine.scene.add(model)
+      } catch (e) {
+        console.error('加载 FBX 模型失败:', key, url, e)
+      }
+    }
   }
 </script>
 <style lang="less">

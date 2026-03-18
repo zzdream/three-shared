@@ -396,7 +396,56 @@ createCacheModalGLB(url: string, cache: { useCache: boolean; database: string; t
 
 ---
 
-## 五、GroundGrip（地面与天空）
+## 五、骨骼动画工具（skeletonAnimation）
+
+`@threejs-shared/core-engine` 内部已经集成了对 FBX/GLB 骨骼动画的统一管理：
+
+- 通过 `createModalFBX / createCacheModalFBX`、`createModalGLB / createCacheModalGLB` 加载的模型，如果包含动画，会自动为其创建 `AnimationMixer` 并播放；
+- `ThreeEngine` 的内部渲染循环会使用自己的 `Clock` 调用 `updateSceneAnimationMixers(scene, delta)`，自动驱动所有挂载在 `userData.animationMixer` 上的骨骼动画；
+- 业务组件无需关心 `mixer.update(delta)` 的细节，只需要专注于“何时需要暂停/恢复某个模型的动画”这一业务决策。
+
+### updateSceneAnimationMixers
+
+> 一般无需业务直接调用，已由 `ThreeEngine` 在内部动画循环中自动调用。
+
+```ts
+updateSceneAnimationMixers(scene: any, delta: number): void
+```
+
+- 遍历 `scene.traverse`，对所有 `obj.userData.animationMixer` 执行 `mixer.update(delta)`。
+- `delta` 建议来自 `THREE.Clock.getDelta()`；引擎已内部维护一份。
+
+### pauseModelAnimation / resumeModelAnimation
+
+用于按“单个模型”粒度控制骨骼动画的暂停与恢复，常见场景如：
+
+- 仿真回放中，当 `speed === 0` 时人物/车辆保持“立正不动”；
+- 某些角色在特定状态下需要暂时停动画（如 UI 暂停、剧情停止）。
+
+```ts
+pauseModelAnimation(model: any): void
+resumeModelAnimation(model: any): void
+```
+
+- 这两个函数依赖于 Loader 在模型上挂载的 `userData.animationActions` 信息（由 `skeletonAnimation` 模块内部维护）。
+- 推荐在业务回放循环中按业务字段决定是否调用，如：
+
+```ts
+const speed = obj.speed ?? 0
+// 位置、朝向更新略…
+
+if (speed === 0) {
+  pauseModelAnimation(vehicle)
+} else {
+  resumeModelAnimation(vehicle)
+}
+```
+
+> 设计上，引擎只提供“怎么停/怎么播”的能力，不内置“speed === 0 就停”这样的业务规则，由业务决定何时调用。
+
+---
+
+## 六、GroundGrip（地面与天空）
 
 ### GroundGripOptions
 
@@ -419,7 +468,7 @@ createCacheModalGLB(url: string, cache: { useCache: boolean; database: string; t
 
 ---
 
-## 六、适配器检测（utils/adapterDetector）
+## 七、适配器检测（utils/adapterDetector）
 
 ### autoDetectHDREnvironmentLoaderAdapter
 
@@ -435,7 +484,7 @@ autoDetectHDREnvironmentLoaderAdapter(): Promise<HDREnvironmentLoaderAdapter>
 
 ---
 
-## 七、类型导出
+## 八、类型导出
 
 - `SceneOptions`, `CameraOptions`, `RendererOptions`, `ControlsOptions`, `LightOptions`, `AnimateCallback`（见上）
 - `HDREnvironmentLoaderAdapter`：`{ createLoader(manager?), version }`

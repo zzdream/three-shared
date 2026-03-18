@@ -2,6 +2,7 @@
 // 使用 any 类型以避免类型检查错误，运行时由使用方项目提供正确的 three 版本
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { updateSceneAnimationMixers } from './skeletonAnimation'
 import type {
 	SceneOptions,
 	CameraOptions,
@@ -11,6 +12,8 @@ import type {
 	AnimateCallback,
 } from './types/options'
 import { calculateViewCenter, setupCameraAndControls } from './cameraUtils'
+// import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
+
 
 /**
  * 引擎配置选项
@@ -214,6 +217,16 @@ export class ThreeEngine {
 		const scene = new (THREE as any).Scene()
 		scene.background = new (THREE as any).Color(backgroundColor)
 
+		// new RGBELoader()
+		// 	.load(
+		// 		'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_09_1k.hdr',
+		// 		function(texture){
+		// 		texture.mapping = THREE.EquirectangularReflectionMapping;
+		// 		scene.environment = texture;
+
+		// 		}
+		// 	);
+
 		return scene
 	}
 
@@ -275,7 +288,6 @@ export class ThreeEngine {
 
 		renderer.setPixelRatio(window.devicePixelRatio)
 		renderer.setSize(container.clientWidth, container.clientHeight)
-
 		if (shadowMapEnabled) {
 			renderer.shadowMap.enabled = true
 			if ((THREE as any).PCFSoftShadowMap) {
@@ -355,11 +367,16 @@ export class ThreeEngine {
 	): () => void {
 		let animationId: number | null = null
 		let isRunning = true
+		const clock = new (THREE as any).Clock()
 
 		const animate = () => {
 			if (!isRunning) return
 
 			animationId = requestAnimationFrame(animate)
+
+			// 更新骨骼动画（FBX / GLB 等），由引擎统一管理
+			const delta = clock.getDelta()
+			updateSceneAnimationMixers(scene, delta)
 
 			// 执行自定义回调
 			if (callback) {

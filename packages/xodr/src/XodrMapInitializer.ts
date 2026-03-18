@@ -51,6 +51,8 @@ export interface XodrMapInitializerOptions {
 	signal?: {
 		/** 信号状态列表 */
 		states?: string[]
+		/** 交通灯类型列表（用于区分交通灯和普通交通标志） */
+		trafficLightTypes?: string[]
 	}
 	/** 隧道配置 */
 	tunnel?: {
@@ -452,6 +454,7 @@ export class XodrMapInitializer {
 				{
 					isLoad: true,
 					states: this.options.signal.states ?? ['_0', '_1', '_2'],
+					trafficLightTypes: this.options.signal.trafficLightTypes,
 				},
 				{
 					useCache: this.options.cache.enabled,

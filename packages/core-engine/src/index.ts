@@ -27,6 +27,13 @@ export {
   createCacheModalGLB,
 } from './loadModal'
 
+// Skeleton animation helpers（骨骼动画工具）
+export {
+  updateSceneAnimationMixers,
+  pauseModelAnimation,
+  resumeModelAnimation,
+} from './skeletonAnimation'
+
 // ========== 其他类 ==========
 export { GroundGrip, type GroundGripOptions } from './GroundGrip'
 
