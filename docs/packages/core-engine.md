@@ -443,6 +443,31 @@ if (speed === 0) {
 
 > 设计上，引擎只提供“怎么停/怎么播”的能力，不内置“speed === 0 就停”这样的业务规则，由业务决定何时调用。
 
+### resetSkinnedMeshesToBindPose
+
+将模型中的所有 `SkinnedMesh` 恢复到绑定/默认姿态（bind pose）。常用于**暂停动画后**让角色回到初始姿势，避免停在中间帧造成观感问题。
+
+```ts
+resetSkinnedMeshesToBindPose(object3D: any): void
+```
+
+- 遍历 `object3D.traverse`，对所有 `child.isSkinnedMesh === true` 的对象调用 `child.pose()`。
+- 该操作只影响骨骼/蒙皮姿态；不会帮你“还原业务上对模型根节点的位移/朝向缩放”等变换（根节点变换仍需业务自行维护）。
+
+**推荐用法**（暂停时回到默认姿态）：
+
+```ts
+const speed = obj.speed ?? 0
+// 位置、朝向更新略…
+
+if (speed === 0) {
+  pauseModelAnimation(vehicle)
+  resetSkinnedMeshesToBindPose(vehicle)
+} else {
+  resumeModelAnimation(vehicle)
+}
+```
+
 ---
 
 ## 六、GroundGrip（地面与天空）
